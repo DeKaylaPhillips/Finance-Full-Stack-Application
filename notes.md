@@ -67,23 +67,7 @@ USER MODEL -
 Authentication --> how a user proves to the server that they are who they say they are; Django provides tools to help conveniently, and securely manage users
 Authorization --> to limit who can do what, Django has a built-in permission system (AbstractUser)
 
-USER BUDGET MODEL 
-    - user_id           --  user can have one monthly budget planning sheet (OneToOne relationship , not null, delete entire model if user is deleted)
-    - budget_amount     --  budget amount needed for calculation of remaining balance (not null, default decimal field 0.00 --> meaning no budget set)
-    - spend_amount      --  spend amount calculated as the sum of all expense inputs (not null, default decimal field 0.00 --> meaing no expenses yet) 
-    - remaining_balance --  remaining balance calculated as difference of budget amount and spend amount (not null)
-                            if budget amount set, but no expenses calculated, budget amount = remaining balance
-                            if budget amount not set, remaining balance = $0.00
-
-*budget has many expense items* OneToMany 
-(Join Table) budget_expense_items
-
-
-
-
 USER EXPENSE MODEL *NEED FOR SAVING THEIR EXPENSE DATA SO THEY CAN REVISIT THEIR BUDGET SHEET AND NOT HAVE TO RE-ENTER WITH EVERY LOGIN*
-    <!-- - user_id           --  user can have a set of expenses (not null, delete entire model if user deleted) -->
-    - budget_id         --  each budget planning sheet will have it's own set of expenses 
     - Title             --  expenses can have titles (not null, charfield)
     - Amount            --  expenses can have amounts (not null, default decimal field $0.00)
         *Preset categories for each user will be created and displayed to the UI ...*
@@ -94,7 +78,21 @@ USER EXPENSE MODEL *NEED FOR SAVING THEIR EXPENSE DATA SO THEY CAN REVISIT THEIR
         - Category Title: Entertainment     
         - Category Title: Food/Dining       
         - Category Title: Childcare         
-        - Category Title: Uncategorized     
+        - Category Title: Uncategorized   
+
+USER BUDGET MODEL 
+    - user              --  user can have one monthly budget planning sheet (OneToOne relationship , not null, delete entire model if user is deleted)
+    - expenses          --  budget can have many expenses within its sheets (ForeignKey relationship, not null, delete expenses if the budget sheet is deleted)
+    - budget_amount     --  budget amount needed for calculation of remaining balance (not null, default decimal field 0.00 --> meaning no budget set)
+    - spend_amount      --  spend amount calculated as the sum of all expense inputs (not null, default decimal field 0.00 --> meaing no expenses yet) 
+    - remaining_balance --  remaining balance calculated as difference of budget amount and spend amount (not null)
+                            if budget amount set, but no expenses calculated, budget amount = remaining balance
+                            if budget amount not set, remaining balance = $0.00
+
+*budget can have many expenses items* OneToMany/ForeignKey 
+*a user can have only one budget sheet* OneToOne
+
+
  
 **FEATURES**
 
