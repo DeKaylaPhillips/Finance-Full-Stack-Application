@@ -21,6 +21,7 @@
 - (To ensure proper working state, vite.svg moved from public/ directory to assets/ directory. Imported svg file in App.jsx, and created viteLogo variable as img src where need be.)
 - Bootstrap installed
 - Axios installed
+- React-Router-Dom installed
 
 **BACKEND**
 - VM created
@@ -97,11 +98,11 @@ USER BUDGET MODEL
 **FEATURES**
 
 ## LOGIN/LOGOUT/SIGN-UP FEATURES
-- SIGN UP ['POST'] Request --> sending user data to the database on the backend for storage and later use of the information
-- SIGN IN ['GET'] Request --> frontend retrieving information from the database and verify if correct --> Redirect to personal monthly budget planner
+* [X] ~~*SIGN UP ['POST'] Request --> sending user data to the database on the backend for storage and later use of the information*~~ [2022-12-08]
+* [ ] SIGN IN ['GET'] Request --> frontend retrieving information from the database and verify if correct --> Redirect to personal monthly budget planner
     - Email
     - Password
-- SIGN OUT ['GET'] Request --> want to retrieve and verify the data of the user signing out of the program --> then Redirect to Home Page on Frontend
+* [ ] SIGN OUT ['GET'] Request --> want to retrieve and verify the data of the user signing out of the program --> then Redirect to Home Page on Frontend
     - Sign out with simple button click
 
 ## BUDGET PLANNING FEATURES   
