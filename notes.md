@@ -147,7 +147,34 @@ then the new spend amount should be reflected on the UI and in the database.
 
 *Possibly use onChange event handler to show automatic calculation of the data and change its state on the frontend and then the ability to submit the form based on the calculate total which will then send the data to the spend amount in the database??? --> Either reload the page with the new spend amount or figure out a way to automatically update the forntend to reflect the new spend amount based on the sum of the expenses*
 
+# VIEWS
+1. *index*
+   ""
+   For reading react static files and rendering react components to the UI
+
+2. *createAccount*
+   Server URL - "api/createAccount/" 
+   Client Route - ""
+
+   Not really a client-side route - simply a view used for sending POST request containing new user data to the database on the authentication/start-up page and will redirect the user to their new dashboard upon successful creation of account.
+
+3. *signIn*
+   Server URL - "api/signIn/"
+   Client Route - ""
+
+   Not really a client-side route - simply a view used for sending POST request to authenticate user login credentials using data from the client-side sign in feature. Upon successful login, client will be redirected to their existing dashboard.
+
+   *Notes*
+   **What exactly is request._request??**
+    # request._request used to access the original request data sent by the client and retrieve the username and password
     
+    # used to access and authenticate the data associated with a login request, and implements secure authentication 
+    
+    # the _ is simply to make the code more readable, no special meaning in this context*
+
+4. *dashboard*
+   Server URL - "api/dashboard/"
+   Client Route - "#/dashboard"
 
 
 

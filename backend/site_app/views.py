@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
 from .models import *
@@ -25,18 +26,33 @@ def createAccount(request):
         return JsonResponse({"Error": str(e)})
 
 @api_view(["POST"])
-def login(request):
-    email = request.data["email"]
+def signIn(request):
+    username = request.data["email"]
     password = request.data["password"]
-    print(email, password)
-
-    user = authenticate(username=email, password=password)
-    if user != None and user.is_active:
+    user = authenticate(username=username, password=password)
+    
+    if user is not None and user.is_active:
         try:
             login(request._request, user)
-            return JsonResponse({"Login": True})
+            if user.is_authenticated:
+                # print(user.id)
+                return HttpResponseRedirect(reverse('dashboard'))
         except Exception as e:
-            print(e)
-            return JsonResponse({"Login": False})
+            print(str(e))
+            return JsonResponse({"Login": False, "Login Failed": f"Server-side error."})
     else:
-        return JsonResponse({"Login": False + "-" + "User not found."})
+        return JsonResponse({"Login": False, "Login Message": f"False - User not found. {request.data}"})
+
+@api_view(["GET"])
+def dashboard(request):
+    first_name = request.user.first_name
+    last_name = request.user.last_name
+
+    data = {
+        "First Name": first_name,
+        "Last Name": last_name
+    }
+
+    print(data)
+    return JsonResponse({"data": data})
+

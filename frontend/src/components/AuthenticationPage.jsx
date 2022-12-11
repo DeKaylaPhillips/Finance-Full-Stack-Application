@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -8,6 +8,9 @@ export default function Authentication() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
 
   async function createAccount(event) {
     event.preventDefault();
@@ -17,46 +20,63 @@ export default function Authentication() {
       email: email,
       password: password,
     });
-
     if (response.data["AccountCreated"] == true) {
-      window.location.href = "/home";
-      setError("");
-    } else {
+      alert("Your account was successfully created. Please log in.");
+      window.location.reload();
+    } else if (response.data["AccountCreated"] == false) {
       setError("Invalid credentials. Please try again.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
     }
   }
 
-  // LOGIN FUNCTION NOT RENDERING TO BACK-IN. TODO!
   async function login(event) {
-    event.preventDefault()
-    const response = await axios.post("/api/login/", {
-      email: email,
-      password: password,
+    event.preventDefault();
+    const response = await axios.post("/api/signIn/", {
+      email: username,
+      password: userPassword,
     });
-    if (response.data["Login"] == true) {
-      window.location.href = "/home";
-      setError("");
-    } else {
-      setError("Invalid login credentials. Please try again.");
+    if (response.data["Login"] !== false) {
+      alert("User successfully logged in. Redirecting to user dashboard.");
+      setTimeout(() => {
+        goToDashboard(), 2000;
+      });
+    } else if (response.data["Login"] == false) {
+      setLoginError("Incorrect username or password. Please try again.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
     }
     console.log(response)
   }
+
+  const navigate = useNavigate();
+  const goToDashboard = () => {
+    navigate("/dashboard");
+  };
 
   return (
     <div>
       <h1>Capital Kay Finance</h1>
       <h5>Returning Users</h5>
       <form onSubmit={login}>
-        {error && <h6 style={{ color: "red", fontWeight: "bold" }}>{error}</h6>}
+        {loginError && (
+          <h4 style={{ color: "red", fontWeight: "bold" }}>
+            {loginError}
+            <br />
+            The page will refresh in 5 seconds...
+          </h4>
+        )}
         <label>
           Email:
           <input
             type="email"
             placeholder="Email"
             style={{ margin: "10px" }}
-            value={email}
+            value={username}
             onChange={(e) => {
-              setEmail(e.target.value);
+              setUsername(e.target.value);
             }}
           />
         </label>
@@ -66,14 +86,15 @@ export default function Authentication() {
             type="password"
             placeholder="Password"
             style={{ margin: "10px" }}
-            value={password}
+            value={userPassword}
             onChange={(e) => {
-              setPassword(e.target.value);
+              setUserPassword(e.target.value);
             }}
           />
         </label>
+        <button>Login</button>
       </form>
-      <button>Login</button>
+
       <br />
       <br />
       <br />
@@ -84,7 +105,13 @@ export default function Authentication() {
         Create a New Account to Get Started!
       </h5>
       <form onSubmit={createAccount}>
-        {error && <h6 style={{ color: "red", fontWeight: "bold" }}>{error}</h6>}
+        {error && (
+          <h6 style={{ color: "red", fontWeight: "bold" }}>
+            {error}
+            <br />
+            The page will refresh in 5 seconds...
+          </h6>
+        )}
         <label>
           First Name:
           <input
