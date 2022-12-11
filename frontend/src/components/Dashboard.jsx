@@ -1,10 +1,15 @@
 import axios from "axios"
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-export default function Dashboard({ user }) {
+export default function Dashboard() {
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+
+
   async function getCurrentUser() {
     const response = await axios.get("/api/dashboard/");
-    console.log(response);
+    setFirstName(response.data.data['First Name']);
+    setLastName(response.data.data['Last Name']);
   }
 
   useEffect(() => {
@@ -13,7 +18,7 @@ export default function Dashboard({ user }) {
 
   return (
     <h1>
-      Wecome! This is your personal dashboard.
+      Wecome {firstName} {lastName}! This is your personal dashboard.
     </h1>
   );
 }
