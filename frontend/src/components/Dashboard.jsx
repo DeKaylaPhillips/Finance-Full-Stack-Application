@@ -12,6 +12,7 @@ export default function Dashboard() {
 
   async function getCurrentUser() {
     const response = await axios.get("/api/dashboard/");
+    console.log("axios call:", response)
     setFirstName(response.data.data["First Name"]);
     setLastName(response.data.data["Last Name"]);
   }

@@ -2,6 +2,7 @@ import axios from "axios";
 import NavBar from "./NavBar";
 import React from "react";
 import { useState, useEffect } from "react";
+import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
 
 export default function BudgetSheet() {
   const [firstName, setFirstName] = useState("");
@@ -17,6 +18,7 @@ export default function BudgetSheet() {
 
   async function getCurrentUser() {
     const response = await axios.get("/api/budgetSheet/");
+    console.log("axios call (budget):", response)
     setFirstName(response.data.data["First Name"]);
     setLastName(response.data.data["Last Name"]);
   }
@@ -42,7 +44,7 @@ export default function BudgetSheet() {
 
   return (
     <>
-      <NavBar user={firstName} />
+      <NavBar firstName={firstName} lastName={lastName}/>
       <div className="container">
         <h1 className="mt-3">{firstName}'s Personal Budget Planner</h1>
         <div className="row mt-3">
