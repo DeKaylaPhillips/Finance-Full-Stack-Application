@@ -1,8 +1,13 @@
 import axios from "axios";
 import NavBar from "./NavBar";
 import React from "react";
+import Budget from "./Budget";
+import Remaining from "./Remaining";
+import Spend from "./SpendAmount";
+import ExpenseList from "./ExpenseList";
 import { useState, useEffect } from "react";
 import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
+import ExpenseItem from "./ExpenseItem";
 
 export default function BudgetSheet() {
   const [firstName, setFirstName] = useState("");
@@ -18,7 +23,7 @@ export default function BudgetSheet() {
 
   async function getCurrentUser() {
     const response = await axios.get("/api/budgetSheet/");
-    console.log("axios call (budget):", response)
+    console.log("axios call (budget):", response);
     setFirstName(response.data.data["First Name"]);
     setLastName(response.data.data["Last Name"]);
   }
@@ -44,31 +49,19 @@ export default function BudgetSheet() {
 
   return (
     <>
-      <NavBar firstName={firstName} lastName={lastName}/>
+      <NavBar firstName={firstName} lastName={lastName} />
       <div className="container">
         <h1 className="mt-3">{firstName}'s Personal Budget Planner</h1>
         <div className="row mt-3">
-          <div className="col-sm">
-            <div className="alert alert-primary">
-              <span>Budget Total: $3000</span> {/* Will come back to add logic instead of hardcoding */}
-            </div>
-            <div className="col-sm">
-              <div className="alert alert-danger">
-                <span>Spend Total: $1500</span>
-              </div>
-            </div>
-            <div className="col-sm">
-              <div className="alert alert-success">
-                <span>Remaining Balance: $1500</span>
-              </div>
-            </div>
-          </div>
+          <div className="col-sm"><Budget /></div>
+          <div className="col-sm"><Remaining /></div>
+          <div className="col-sm"><Spend /></div>
         </div>
       </div>
       <br />
       <br />
       <h4>Expenses</h4>
-
+      <ExpenseList />
       {/* <form onSubmit={() => calculateExpenses(expenses)}>
         <label>
           Rent: <input type="text" data-type="currency" value={rentAmount} onChange={(e) => setRentAmount(e.target.value)}/> ${rentAmount}
