@@ -1,8 +1,10 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "axios";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Authentication from "./components/AuthenticationPage";
 import Dashboard from "./components/Dashboard";
+import BudgetSheet from "./components/BudgetSheet";
 
 const getCSRFToken = ()=>{
   let csrfToken
@@ -22,12 +24,14 @@ axios.defaults.headers.common['X-CSRFToken'] = getCSRFToken()
 
 
 function App() {
+
   return (
     <div className="App">
       <Router>
         <Routes>
           <Route exact path="" element={<Authentication />} />
-          <Route path="/dashboard" element={<Dashboard />} /> {/* Might need to add API in front of this. */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/budgetSheet" element={<BudgetSheet />} />
         </Routes>
       </Router>
     </div>

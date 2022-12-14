@@ -22,7 +22,7 @@ def createAccount(request):
         User.objects.create_user(first_name=first_name, last_name=last_name, email=email, password=password, username=email)
         return JsonResponse({"AccountCreated": True, "data": request.data})
     except Exception as e:
-        print(e)
+        print(str(e))
         return JsonResponse({"Error": str(e)})
 
 @api_view(["POST"])
@@ -56,3 +56,18 @@ def dashboard(request):
     print(data)
     return JsonResponse({"data": data})
 
+@api_view(["GET", "POST", "PUT"])
+def budget_sheet(request):
+    if request.method == "GET":
+        first_name = request.user.first_name
+        last_name = request.user.last_name
+        data = {
+        "First Name": first_name,
+        "Last Name": last_name
+        }
+        print(data)
+        return JsonResponse({"data": data})
+    elif request.method == "POST":
+        pass
+    elif request.method == "PUT":
+        pass

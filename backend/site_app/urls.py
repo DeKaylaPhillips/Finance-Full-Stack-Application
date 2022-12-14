@@ -6,5 +6,6 @@ urlpatterns = [
     path('api/createAccount/', views.createAccount),
     path('api/signIn/', views.signIn),
     path('api/dashboard/', views.dashboard, name='dashboard'),
+    path('api/budgetSheet/', views.budget_sheet, name='budget-sheet'),
     re_path('.*/', views.index),
 ]

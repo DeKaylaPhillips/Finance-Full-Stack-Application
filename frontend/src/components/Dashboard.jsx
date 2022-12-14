@@ -1,15 +1,19 @@
-import axios from "axios"
-import { useEffect, useState } from 'react'
+import axios from "axios";
+import { Container, Image } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import NavBar from "./NavBar";
+
 
 export default function Dashboard() {
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  let background =
+    "https://www.pngmart.com/files/7/Budget-Transparent-Background.png";
 
   async function getCurrentUser() {
     const response = await axios.get("/api/dashboard/");
-    setFirstName(response.data.data['First Name']);
-    setLastName(response.data.data['Last Name']);
+    setFirstName(response.data.data["First Name"]);
+    setLastName(response.data.data["Last Name"]);
   }
 
   useEffect(() => {
@@ -17,8 +21,11 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <h1>
-      Wecome {firstName} {lastName}! This is your personal dashboard.
-    </h1>
+    <>
+    <NavBar firstName={firstName} lastName={lastName} />
+      <Container fluid>
+        <Image src={background} />
+      </Container>
+    </>
   );
 }

@@ -61,99 +61,55 @@ export default function Authentication() {
       <h1>Capital Kay Finance</h1>
       <h5>Returning Users</h5>
       <form onSubmit={login}>
-        {loginError && (
-          <h4 style={{ color: "red", fontWeight: "bold" }}>
-            {loginError}
-            <br />
-            The page will refresh in 5 seconds...
-          </h4>
-        )}
+        
+        {loginError && (<h4 style={{ color: "red", fontWeight: "bold" }}>{loginError}<br />The page will refresh in 5 seconds...</h4>)}
+        
         <label>
           Email:
-          <input
-            type="email"
-            placeholder="Email"
-            style={{ margin: "10px" }}
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-          />
+          <input type="email" placeholder="Email" style={{ margin: "10px" }} value={username} onChange={(e) => {setUsername(e.target.value);}} />
         </label>
+        
         <label>
           Password:
-          <input
-            type="password"
-            placeholder="Password"
-            style={{ margin: "10px" }}
-            value={userPassword}
-            onChange={(e) => {
-              setUserPassword(e.target.value);
-            }}
-          />
+          <input type="password" placeholder="Password" style={{ margin: "10px" }} value={userPassword} onChange={(e) => {setUserPassword(e.target.value);}} />
         </label>
-        <button>Login</button>
+        
+        <button type="submit">Login</button>
       </form>
 
       <br />
       <br />
       <br />
       <br />
+
       <h5>
         Never Used Our Site Before?
         <br />
         Create a New Account to Get Started!
       </h5>
+      
       <form onSubmit={createAccount}>
-        {error && (
-          <h6 style={{ color: "red", fontWeight: "bold" }}>
-            {error}
-            <br />
-            The page will refresh in 5 seconds...
-          </h6>
-        )}
+        
+        {error && (<h6 style={{ color: "red", fontWeight: "bold" }}>{error}<br />The page will refresh in 5 seconds...</h6>)}
+        
         <label>
           First Name:
-          <input
-            type="text"
-            style={{ margin: "10px" }}
-            value={firstName}
-            placeholder="First Name"
-            onChange={(e) => setFirstName(e.target.value)}
-          />
+          <input type="text" style={{ margin: "10px" }} value={firstName} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
         </label>
         <br />
         <label>
           Last Name:
-          <input
-            type="text"
-            style={{ margin: "10px" }}
-            value={lastName}
-            placeholder="Last Name"
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <input type="text" style={{ margin: "10px" }} value={lastName} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
         </label>
         <br />
         <label>
           Email:
-          <input
-            type="email"
-            style={{ margin: "10px" }}
-            value={email}
-            placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <input type="email" style={{ margin: "10px" }} value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
         </label>
         <br />
         <label>
           Password
-          <input
-            type="password"
-            style={{ margin: "10px" }}
-            value={password}
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <input type="password" style={{ margin: "10px" }} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         </label>
         <br />
         <button type="submit">Create Account</button>
