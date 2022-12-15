@@ -17,9 +17,23 @@ def createAccount(request):
     email = request.data["email"]
     password = request.data["password"]
     print(first_name, last_name, email, password)
+ 
 
+    
     try:
-        User.objects.create_user(first_name=first_name, last_name=last_name, email=email, password=password, username=email)
+        new_user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, password=password, username=email)
+        new_user.save()
+        
+        premade_expense_list = [
+            UserExpense(user=new_user, title="Rent", amount=0.0),
+            UserExpense(user=new_user, title="Utilities", amount=0.0),
+            UserExpense(user=new_user, title="Transportation", amount=0.0),
+            UserExpense(user=new_user, title="Food/Dining", amount=0.0),
+            UserExpense(user=new_user, title="Childcare", amount=0.0),
+            UserExpense(user=new_user, title="Uncategorized", amount=0.0),
+        ]
+        
+        UserExpense.objects.bulk_create(premade_expense_list)
         return JsonResponse({"AccountCreated": True, "data": request.data})
     except Exception as e:
         print(str(e))
@@ -61,13 +75,18 @@ def budget_sheet(request):
     if request.method == "GET":
         first_name = request.user.first_name
         last_name = request.user.last_name
+        
         data = {
         "First Name": first_name,
         "Last Name": last_name
         }
         print(data)
         return JsonResponse({"data": data})
+        
+        print(expenses)
     elif request.method == "POST":
         pass
     elif request.method == "PUT":
         pass
+    
+    

@@ -10,11 +10,12 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 class UserExpense(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=32)
     amount = models.DecimalField(max_digits=8, decimal_places=2, blank=True, default=0.0)
 
 class UserBudget(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     expenses = models.ForeignKey(UserExpense, on_delete=models.CASCADE, null=False)
     budget_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     spend_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)

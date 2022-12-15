@@ -4,9 +4,6 @@ import { ListGroup, ListGroupItem } from "react-bootstrap";
 import { TiDelete } from "react-icons/ti";
 
 export default function ExpenseItem(props) {
-  console.log(props.id);
-  console.log(props.title);
-  console.log(props.cost);
   return (
     <div className="list-group p-2">
       <ListGroupItem action variant="success">
