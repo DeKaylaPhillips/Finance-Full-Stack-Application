@@ -23,18 +23,6 @@ def createAccount(request):
     try:
         new_user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, password=password, username=email)
         new_user.save()
-        
-        # premade_expense_list = [
-        #     UserExpense(user=new_user, title="Rent", amount=0.0),
-        #     UserExpense(user=new_user, title="Utilities", amount=0.0),
-        #     UserExpense(user=new_user, title="Transportation", amount=0.0),
-        #     UserExpense(user=new_user, title="Food/Dining", amount=0.0),
-        #     UserExpense(user=new_user, title="Childcare", amount=0.0),
-        #     UserExpense(user=new_user, title="Uncategorized", amount=0.0),
-        # ]
-        
-        # premade_expenses = UserExpense.objects.bulk_create(premade_expense_list)
-        # premade_expenses.save()
 
         expense_data = [
             {'title': "Rent", 'amount': 0.0}, 
@@ -47,8 +35,7 @@ def createAccount(request):
         
         for e in expense_data:
             UserExpense.objects.create(user=new_user, title=e['title'], amount=e['amount']).save()
-            
-            
+              
         return JsonResponse({"AccountCreated": True, "data": request.data})
     except Exception as e:
         print(str(e))
