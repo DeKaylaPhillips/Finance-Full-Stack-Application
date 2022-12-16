@@ -18,8 +18,6 @@ def createAccount(request):
     password = request.data["password"]
     print(first_name, last_name, email, password)
  
-
-    
     try:
         new_user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, password=password, username=email)
         new_user.save()
