@@ -66,27 +66,43 @@ def dashboard(request):
         "First Name": first_name,
         "Last Name": last_name
     }
-
-    print(data)
     return JsonResponse({"data": data})
 
 @api_view(["GET", "POST", "PUT"])
 def budget_sheet(request):
+    # Get the user to display in the "Sign In As" section of the NavBar
     if request.method == "GET":
         first_name = request.user.first_name
         last_name = request.user.last_name
-        
+        UserBudget.objects.get_or_create(user=request.user)
+        budget = list(UserBudget.objects.filter(user=request.user).values())
+
         data = {
         "First Name": first_name,
-        "Last Name": last_name
+        "Last Name": last_name,
+        "Budget": budget[0]
         }
         print(data)
         return JsonResponse({"data": data})
+    # Update a user's budget amount from the default amount based on the input and save to the database
+    if request.method == "PUT":
+        budget_amount = request.data['budget_amount']
+        user_budget = UserBudget.objects.get(user=request.user)
+        user_budget.budget_amount = budget_amount
+        user_budget.save()
         
-        print(expenses)
-    elif request.method == "POST":
-        pass
-    elif request.method == "PUT":
-        pass
+        # Retrieves the remaining balance
+        # user_budget.remaining_balance
+        
+        # Retrieves the spend amount - this total is based on the expense total
+        # user_budget.spend_amount
+
+        # Retrieves the current user's expenses
+        # user_expenses = UserExpense.objects.get(user=request.user)
+        # Use this query to access the amounts of the expenses - may need use a method to calculate all of the current expenses
+        # user_expenses.amount
+            
+        return JsonResponse({"success": True})
+
     
     

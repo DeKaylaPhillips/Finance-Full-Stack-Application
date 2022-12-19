@@ -13,40 +13,19 @@ import ExpenseItem from "./ExpenseItem";
 export default function BudgetSheet() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  // const [rentAmount, setRentAmount] = useState(0);
-  // const [utilitiesAmount, setUtilitiesAmount] = useState(0);
-  // const [shoppingAmount, setShoppingAmount] = useState(0);
-  // const [transportationAmount, setTransportationAmount] = useState(0);
-  // const [foodAmount, setFoodAmount] = useState(0);
-  // const [childcareAmount, setChildcareAmount] = useState(0);
-  // const [uncategorizedAmount, setUncategorizedAmount] = useState(0);
-  // const [expenseTotal, setExpenseTotal] = useState(0);
+  const [budgetAmount, setBudgetAmount] = useState(0);
 
-  // const expenses = [
-  //   { rentAmount },
-  //   { utilitiesAmount },
-  //   { shoppingAmount },
-  //   { transportationAmount },
-  //   { foodAmount },
-  //   { childcareAmount },
-  //   { uncategorizedAmount },
-  // ];
   async function getCurrentUser() {
     const response = await axios.get("/api/budgetSheet/");
-    console.log("axios call (budget):", response);
+    console.log("axios call (budget):", response.data.data.Budget.budget_amount);
     setFirstName(response.data.data["First Name"]);
     setLastName(response.data.data["Last Name"]);
+    setBudgetAmount(response.data.data.Budget.budget_amount)
   }
 
   useEffect(() => {
     getCurrentUser();
   }, []);
-
-
-  const calculateExpenses = () => {
-    let total = expenses.reduce((acc, curr) => acc + curr, 0);
-    setExpenseTotal(total);
-  };
 
   return (
     <>
@@ -55,7 +34,7 @@ export default function BudgetSheet() {
         <h1 className="mt-3">{firstName}'s Personal Budget Planner</h1>
         <div className="row mt-3">
           <div className="col-sm">
-            <Budget />
+            <Budget budget={budgetAmount} getUser={getCurrentUser} setBudgetAmount={setBudgetAmount}/>
           </div>
           <div className="col-sm">
             <Remaining />
@@ -78,7 +57,29 @@ export default function BudgetSheet() {
         </div>
       </div>
 
-      {/* <form onSubmit={() => calculateExpenses(expenses)}>
+      
+    </>
+  );
+}
+ // const [rentAmount, setRentAmount] = useState(0);
+  // const [utilitiesAmount, setUtilitiesAmount] = useState(0);
+  // const [shoppingAmount, setShoppingAmount] = useState(0);
+  // const [transportationAmount, setTransportationAmount] = useState(0);
+  // const [foodAmount, setFoodAmount] = useState(0);
+  // const [childcareAmount, setChildcareAmount] = useState(0);
+  // const [uncategorizedAmount, setUncategorizedAmount] = useState(0);
+  // const [expenseTotal, setExpenseTotal] = useState(0);
+
+  // const expenses = [
+  //   { rentAmount },
+  //   { utilitiesAmount },
+  //   { shoppingAmount },
+  //   { transportationAmount },
+  //   { foodAmount },
+  //   { childcareAmount },
+  //   { uncategorizedAmount },
+  // ];
+  {/* <form onSubmit={() => calculateExpenses(expenses)}>
         <label>
           Rent: <input type="text" data-type="currency" value={rentAmount} onChange={(e) => setRentAmount(e.target.value)}/> ${rentAmount}
         </label>
@@ -112,7 +113,9 @@ export default function BudgetSheet() {
         <h6>
           Expense Total: ${expenseTotal} <button>Submit</button>
         </h6>
-      </form> */}
-    </>
-  );
-}
+      </form> */}  
+  
+  // const calculateExpenses = () => {
+  //   let total = expenses.reduce((acc, curr) => acc + curr, 0);
+  //   setExpenseTotal(total);
+  // };
