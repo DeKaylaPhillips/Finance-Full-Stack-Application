@@ -8,6 +8,7 @@ import { IconButton } from "rsuite";
 export default function ExpenseItem(props) {
   const [newAmount, setNewAmount] = useState(0);
 
+  // PUT - Update expenses in the current expense list
   async function updateExpenseCost(event) {
     event.preventDefault()
     const response = await axios.put("/api/budgetSheet/", {
@@ -27,7 +28,9 @@ export default function ExpenseItem(props) {
     }
   }
 
+  // DELETE - Delete expenses in the current expense list
   async function deleteExpense(event) {
+    event.preventDefault()
     const response = await axios.delete("/api/budgetSheet/", {
       data: {
         id: props.id,

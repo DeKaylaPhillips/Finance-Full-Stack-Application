@@ -107,7 +107,7 @@ def budget_sheet(request):
         "Remaining Balance": budget_obj.remaining_balance
         }
 
-        return JsonResponse({"Success": True, "data": data})
+        return JsonResponse({"Success": f"{True} - User Budget Information Accessible", "data": data})
     
     # Update a user's budget amount from the default amount based on the input and save to the database
     if request.method == "PUT":
@@ -118,24 +118,43 @@ def budget_sheet(request):
             user_budget = UserBudget.objects.get(user=request.user)
             user_budget.budget_amount = request.data['budget_amount']
             user_budget.save()
-            return JsonResponse({"Budget": user_budget.budget_amount})
+            return JsonResponse({"Success": True, "Budget": f"BUDGET AMOUNT UPDATED: ${user_budget.budget_amount}"})
 
         elif expense_amount:
-            expense_id = request.data.get('id', None)
+            expense_id = request.data['id']
             expense = UserExpense.objects.filter(user=request.user, id=expense_id).update(amount=request.data['amount'])
             expenses = UserExpense.objects.filter(user=request.user).order_by('id')
-            return JsonResponse({"Success": True, "Expenses": list(expenses.values())})
+            
+            data = {
+                "Updated Expense": expense_id
+            }
+
+            return JsonResponse({"Success": True, "data": f"EXPENSE UPDATED. {data}"})
         
         else:
             return JsonResponse({"Error": "Something went wrong!"})
 
     if request.method == "DELETE":
-        expense_to_delete = request.data.get('id')
+        expense_to_delete = request.data['id']
         UserExpense.objects.filter(user=request.user, id=expense_to_delete).delete()
-        return JsonResponse({"Success": True, "Expense Status": "REMOVED FROM LIST."})
+
+        data = {
+            "Deleted Expense": expense_to_delete
+        }
+
+        return JsonResponse({"Success": True, "data": f"EXPENSE REMOVED. {data}"})
         
     if request.method == "POST":
-        pass
+        add_expense_title = request.data['title']
+        add_expense_amount = request.data['amount']
+        UserExpense.objects.create(user=request.user, title=add_expense_title, amount=add_expense_amount)
+        
+        data = {
+            "Title": add_expense_amount,
+            "Amount": add_expense_amount
+        }
+
+        return JsonResponse({"Success": True, "data": f"EXPENSE ADDED. {data}"})
         
             
 
