@@ -18,6 +18,7 @@ export default function BudgetSheet() {
 
   async function getCurrentUser() {
     const response = await axios.get("/api/budgetSheet/");
+    console.log(response.data)
     setFirstName(response.data.data["First Name"]);
     setLastName(response.data.data["Last Name"]);
     setBudgetAmount(response.data.data.Budget.budget_amount);
@@ -67,7 +68,10 @@ export default function BudgetSheet() {
                   id={expense.id}
                   title={expense.title}
                   amount={expense.amount}
+                  expenses={expenses}
                   setExpenses={setExpenses}
+                  setRemainingBalance={setRemainingBalance}
+                  setSpendAmount={setSpendAmount}
                   getUser={getCurrentUser}
                 />
               ))}

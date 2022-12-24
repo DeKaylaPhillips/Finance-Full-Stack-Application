@@ -1,10 +1,9 @@
 import React from "react";
 
 export default function Spend(props) {
-  async function addRemainingBalance(event) {
+  async function addSpendTotal(event) {
     event.preventDefault()
     const response = await axios.get("/api/budgetSheet/")
-    console.log("Axios Call (addRemainingBalance):", response);
     props.getUser()
   }
 

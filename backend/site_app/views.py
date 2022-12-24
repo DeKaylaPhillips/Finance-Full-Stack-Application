@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
 from .models import *
+from functools import reduce
 # Create your views here.
 
 def index(request):
@@ -68,30 +69,45 @@ def dashboard(request):
     }
     return JsonResponse({"data": data})
 
-@api_view(["GET", "POST", "PUT"])
+@api_view(["GET", "POST", "PUT", "DELETE"])
 def budget_sheet(request):
+
     # Get the user to display in the "Sign In As" section of the NavBar
     if request.method == "GET":
+        # Grab the user's information
         first_name = request.user.first_name
         last_name = request.user.last_name
+
+        # If the user is new, create a new personal budget sheet for them - otherwise, get the current logged in user's budget sheet.
         UserBudget.objects.get_or_create(user=request.user)
+
+        # Access the values in the budget sheet w/o serialization by creating lists.
         budget = list(UserBudget.objects.filter(user=request.user).values())
+
+        # Expense Calculation
         expenses = list(UserExpense.objects.all().values())   
+        expense_total = reduce(lambda acc, curr_val: acc + curr_val['amount'], expenses, 0)
+        
+        # Spend Total Calculation
+        budget_obj = UserBudget.objects.get(user=request.user)
+        budget_obj.spend_amount = expense_total
+        budget_obj.save()
+        
+        # Remaining Balance Calculation
+        budget_obj.remaining_balance = float(budget_obj.budget_amount - budget_obj.spend_amount)
+        budget_obj.save()
 
         data = {
         "First Name": first_name,
         "Last Name": last_name,
         "Budget": budget[0],
-        "Expenses": expenses
+        "Budget Amount": budget_obj.budget_amount,
+        "Expenses": expenses,
+        "Spend Amount": budget_obj.spend_amount,
+        "Remaining Balance": budget_obj.remaining_balance
         }
 
-        expense_amounts = []
-        for exp in expenses:
-            expense_amounts.append(exp['amount'])
-        
-        print(expense_amounts)
-
-        return JsonResponse({"data": data})
+        return JsonResponse({"Success": True, "data": data})
     
     # Update a user's budget amount from the default amount based on the input and save to the database
     if request.method == "PUT":
@@ -113,11 +129,14 @@ def budget_sheet(request):
         else:
             return JsonResponse({"Error": "Something went wrong!"})
 
-        # Retrieves the remaining balance
-        # user_budget.remaining_balance 
+    if request.method == "DELETE":
+        expense_to_delete = request.data.get('id')
+        UserExpense.objects.filter(user=request.user, id=expense_to_delete).delete()
+        return JsonResponse({"Success": True, "Expense Status": "REMOVED FROM LIST."})
         
-        # Retrieves the spend amount - this total is based on the expense total
-        # user_budget.spend_amount
+    if request.method == "POST":
+        pass
+        
             
 
     

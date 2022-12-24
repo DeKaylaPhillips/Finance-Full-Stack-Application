@@ -9,28 +9,49 @@ export default function ExpenseItem(props) {
   const [newAmount, setNewAmount] = useState(0);
 
   async function updateExpenseCost(event) {
-    event.preventDefault();
+    event.preventDefault()
     const response = await axios.put("/api/budgetSheet/", {
       id: props.id,
       amount: newAmount,
     });
     console.log("Axios Call (updateUserExpense):", response);
+
+    // For automatic state updates to reflect changes in remaining and spend total
     if (response.status == 200) {
+      const response = await axios.get("/api/budgetSheet/")
+      console.log(response)
+      const updatedSpendAmount = response.data.data.Budget.spend_amount
+      console.log(updatedSpendAmount)
+      const updatedRemainingBalance = response.data.data.Budget.remaining_balance
+      console.log(updatedRemainingBalance)
+      props.setSpendAmount(updatedSpendAmount);
+      props.setRemainingBalance(updatedRemainingBalance);
       props.getUser();
     }
   }
 
   async function deleteExpense(event) {
     const response = await axios.delete("/api/budgetSheet/", {
-      id: props.id,
-      amoutn: props.amount,
+      data: {
+        id: props.id,
+      } 
     });
     console.log("Axios Call (deleteUserExpense):", response);
+    
+    // For automatic state updates to reflect changes in remaining and spend total
     if (response.status == 200) {
-      const updatedExpenses = expenses.filter(
+      const deleteResponse = await axios.get("/api/budgetSheet/");
+      const updatedSpendAmount = deleteResponse.data.data.Budget.spend_amount;
+      const updatedRemainingBalance = deleteResponse.data.data.Budget.remaining_balance;
+      props.setSpendAmount(updatedSpendAmount);
+      props.setRemainingBalance(updatedRemainingBalance);
+
+      // For automatic state updates to reflect change the list of expenses on the page.
+      const updatedExpenses = props.expenses.filter(
         (expense) => expense.id !== props.id
       );
-      setExpenses(updatedExpenses);
+      props.setExpenses(updatedExpenses);
+      props.getUser()
     }
   }
 
