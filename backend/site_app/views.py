@@ -76,33 +76,49 @@ def budget_sheet(request):
         last_name = request.user.last_name
         UserBudget.objects.get_or_create(user=request.user)
         budget = list(UserBudget.objects.filter(user=request.user).values())
+        expenses = list(UserExpense.objects.all().values())   
 
         data = {
         "First Name": first_name,
         "Last Name": last_name,
-        "Budget": budget[0]
+        "Budget": budget[0],
+        "Expenses": expenses
         }
-        print(data)
+
+        expense_amounts = []
+        for exp in expenses:
+            expense_amounts.append(exp['amount'])
+        
+        print(expense_amounts)
+
         return JsonResponse({"data": data})
+    
     # Update a user's budget amount from the default amount based on the input and save to the database
     if request.method == "PUT":
-        budget_amount = request.data['budget_amount']
-        user_budget = UserBudget.objects.get(user=request.user)
-        user_budget.budget_amount = budget_amount
-        user_budget.save()
+        budget_amount = request.data.get('budget_amount', None)
+        expense_amount = request.data.get('amount', None)
+
+        if budget_amount:
+            user_budget = UserBudget.objects.get(user=request.user)
+            user_budget.budget_amount = request.data['budget_amount']
+            user_budget.save()
+            return JsonResponse({"Budget": user_budget.budget_amount})
+
+        elif expense_amount:
+            expense_id = request.data.get('id', None)
+            expense = UserExpense.objects.filter(user=request.user, id=expense_id).update(amount=request.data['amount'])
+            expenses = UserExpense.objects.filter(user=request.user).order_by('id')
+            return JsonResponse({"Success": True, "Expenses": list(expenses.values())})
         
+        else:
+            return JsonResponse({"Error": "Something went wrong!"})
+
         # Retrieves the remaining balance
-        # user_budget.remaining_balance
+        # user_budget.remaining_balance 
         
         # Retrieves the spend amount - this total is based on the expense total
         # user_budget.spend_amount
-
-        # Retrieves the current user's expenses
-        # user_expenses = UserExpense.objects.get(user=request.user)
-        # Use this query to access the amounts of the expenses - may need use a method to calculate all of the current expenses
-        # user_expenses.amount
             
-        return JsonResponse({"success": True})
 
     
     

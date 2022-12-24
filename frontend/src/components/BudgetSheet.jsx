@@ -4,23 +4,26 @@ import React from "react";
 import Budget from "./Budget";
 import Remaining from "./Remaining";
 import Spend from "./SpendAmount";
-import ExpenseList from "./ExpenseList";
 import AddExpense from "./AddExpense";
 import { useState, useEffect } from "react";
-import { responsivePropType } from "react-bootstrap/esm/createUtilityClasses";
 import ExpenseItem from "./ExpenseItem";
 
 export default function BudgetSheet() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [budgetAmount, setBudgetAmount] = useState(0);
+  const [remainingBalance, setRemainingBalance] = useState(0);
+  const [spendAmount, setSpendAmount] = useState(0);
+  const [expenses, setExpenses] = useState([]);
 
   async function getCurrentUser() {
     const response = await axios.get("/api/budgetSheet/");
-    console.log("axios call (budget):", response.data.data.Budget.budget_amount);
     setFirstName(response.data.data["First Name"]);
     setLastName(response.data.data["Last Name"]);
-    setBudgetAmount(response.data.data.Budget.budget_amount)
+    setBudgetAmount(response.data.data.Budget.budget_amount);
+    setRemainingBalance(response.data.data.Budget.remaining_balance);
+    setSpendAmount(response.data.data.Budget.spend_amount);
+    setExpenses(response.data.data.Expenses);
   }
 
   useEffect(() => {
@@ -34,19 +37,41 @@ export default function BudgetSheet() {
         <h1 className="mt-3">{firstName}'s Personal Budget Planner</h1>
         <div className="row mt-3">
           <div className="col-sm">
-            <Budget budget={budgetAmount} getUser={getCurrentUser} setBudgetAmount={setBudgetAmount}/>
+            <Budget
+              budget={budgetAmount}
+              getUser={getCurrentUser}
+              setBudgetAmount={setBudgetAmount}
+            />
           </div>
           <div className="col-sm">
-            <Remaining />
+            <Remaining
+              remaining={remainingBalance}
+              getUser={getCurrentUser}
+              setRemainingBalance={setRemainingBalance}
+            />
           </div>
           <div className="col-sm">
-            <Spend />
+            <Spend
+              spend={spendAmount}
+              getUser={getCurrentUser}
+              setSpendAmount={setSpendAmount}
+            />
           </div>
         </div>
         <h4 className="mt-3">Expenses</h4>
         <div className="row mt-3">
           <div className="col-sm">
-            <ExpenseList />
+            <ul>
+              {expenses.map((expense) => (
+                <ExpenseItem
+                  id={expense.id}
+                  title={expense.title}
+                  amount={expense.amount}
+                  setExpenses={setExpenses}
+                  getUser={getCurrentUser}
+                />
+              ))}
+            </ul>
           </div>
         </div>
         <h4 className="mt-3">Add Expenses</h4>
@@ -56,30 +81,29 @@ export default function BudgetSheet() {
           </div>
         </div>
       </div>
-
-      
     </>
   );
 }
- // const [rentAmount, setRentAmount] = useState(0);
-  // const [utilitiesAmount, setUtilitiesAmount] = useState(0);
-  // const [shoppingAmount, setShoppingAmount] = useState(0);
-  // const [transportationAmount, setTransportationAmount] = useState(0);
-  // const [foodAmount, setFoodAmount] = useState(0);
-  // const [childcareAmount, setChildcareAmount] = useState(0);
-  // const [uncategorizedAmount, setUncategorizedAmount] = useState(0);
-  // const [expenseTotal, setExpenseTotal] = useState(0);
+// const [rentAmount, setRentAmount] = useState(0);
+// const [utilitiesAmount, setUtilitiesAmount] = useState(0);
+// const [shoppingAmount, setShoppingAmount] = useState(0);
+// const [transportationAmount, setTransportationAmount] = useState(0);
+// const [foodAmount, setFoodAmount] = useState(0);
+// const [childcareAmount, setChildcareAmount] = useState(0);
+// const [uncategorizedAmount, setUncategorizedAmount] = useState(0);
+// const [expenseTotal, setExpenseTotal] = useState(0);
 
-  // const expenses = [
-  //   { rentAmount },
-  //   { utilitiesAmount },
-  //   { shoppingAmount },
-  //   { transportationAmount },
-  //   { foodAmount },
-  //   { childcareAmount },
-  //   { uncategorizedAmount },
-  // ];
-  {/* <form onSubmit={() => calculateExpenses(expenses)}>
+// const expenses = [
+//   { rentAmount },
+//   { utilitiesAmount },
+//   { shoppingAmount },
+//   { transportationAmount },
+//   { foodAmount },
+//   { childcareAmount },
+//   { uncategorizedAmount },
+// ];
+{
+  /* <form onSubmit={() => calculateExpenses(expenses)}>
         <label>
           Rent: <input type="text" data-type="currency" value={rentAmount} onChange={(e) => setRentAmount(e.target.value)}/> ${rentAmount}
         </label>
@@ -113,9 +137,10 @@ export default function BudgetSheet() {
         <h6>
           Expense Total: ${expenseTotal} <button>Submit</button>
         </h6>
-      </form> */}  
-  
-  // const calculateExpenses = () => {
-  //   let total = expenses.reduce((acc, curr) => acc + curr, 0);
-  //   setExpenseTotal(total);
-  // };
+      </form> */
+}
+
+// const calculateExpenses = () => {
+//   let total = expenses.reduce((acc, curr) => acc + curr, 0);
+//   setExpenseTotal(total);
+// };

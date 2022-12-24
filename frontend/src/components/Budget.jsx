@@ -1,33 +1,40 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { GrAddCircle } from "react-icons/gr";
+import { IconButton } from "rsuite";
 
 export default function Budget(props) {
-  
   async function addUserBudget(event) {
-    event.preventDefault()
+    event.preventDefault();
     const response = await axios.put("/api/budgetSheet/", {
-    budget_amount: props.budget,
-  });
+      budget_amount: props.budget,
+    });
     console.log("Axios Call (addUserBudget):", response);
-    props.getUser()
+    props.getUser();
   }
 
   return (
     <div>
       <div className="alert alert-primary">
-        <span>Budget Total: ${props.budget}</span>
-      </div>
-      <div>
+        Budget Total: ${props.budget} 
+        <br />
+        <br />
         <form onSubmit={addUserBudget}>
-          <label>
-            Enter Budget:
-            <input
-              type="text"
-              placeholder={props.budget}
-              onChange={(e) => props.setBudgetAmount(e.target.value)}
-            />
-          </label>
-          <button type="submit">Add</button>
+          Add/Update:
+          <br />
+          <input
+            type="text"
+            placeholder="Budget"
+            style={{ color: "white", width: "4em" }}
+            onChange={(e) => props.setBudgetAmount(e.target.value)}
+          />{" "}
+          <IconButton
+            type="submit"
+            style={{backgroundColor: "transparent", color: "black"}}
+            circle
+            size="xs"
+            icon={<GrAddCircle size="1.5em" />}
+          />
         </form>
       </div>
     </div>
