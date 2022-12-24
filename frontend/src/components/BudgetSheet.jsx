@@ -40,10 +40,13 @@ export default function BudgetSheet() {
         <h1 className="mt-3">{firstName}'s Personal Budget Planner</h1>
         <div className="row mt-3">
           <div className="col-sm">
-            <Budget
+            <Budget 
               budget={budgetAmount}
-              getUser={getCurrentUser}
               setBudgetAmount={setBudgetAmount}
+              setExpenses={setExpenses} 
+              setRemainingBalance={setRemainingBalance} 
+              setSpendAmount={setSpendAmount} 
+              getUser={getCurrentUser}
             />
           </div>
           <div className="col-sm">
@@ -83,70 +86,10 @@ export default function BudgetSheet() {
         <h4 className="mt-3">Add Expenses</h4>
         <div className="row mt-3">
           <div className="col-sm">
-            <AddExpense />
+            <AddExpense setExpenses={setExpenses} setRemainingBalance={setRemainingBalance} setSpendAmount={setSpendAmount} getUser={getCurrentUser}/>
           </div>
         </div>
       </div>
     </>
   );
 }
-// const [rentAmount, setRentAmount] = useState(0);
-// const [utilitiesAmount, setUtilitiesAmount] = useState(0);
-// const [shoppingAmount, setShoppingAmount] = useState(0);
-// const [transportationAmount, setTransportationAmount] = useState(0);
-// const [foodAmount, setFoodAmount] = useState(0);
-// const [childcareAmount, setChildcareAmount] = useState(0);
-// const [uncategorizedAmount, setUncategorizedAmount] = useState(0);
-// const [expenseTotal, setExpenseTotal] = useState(0);
-
-// const expenses = [
-//   { rentAmount },
-//   { utilitiesAmount },
-//   { shoppingAmount },
-//   { transportationAmount },
-//   { foodAmount },
-//   { childcareAmount },
-//   { uncategorizedAmount },
-// ];
-{
-  /* <form onSubmit={() => calculateExpenses(expenses)}>
-        <label>
-          Rent: <input type="text" data-type="currency" value={rentAmount} onChange={(e) => setRentAmount(e.target.value)}/> ${rentAmount}
-        </label>
-        <br />
-        <label>
-          Utilities: <input type="text" data-type="currency" value={utilitiesAmount} onChange={(e) => setUtilitiesAmount(e.target.value)}/> ${utilitiesAmount}
-        </label>
-        <br />
-        <label>
-          Shopping: <input type="text" data-type="currency" value={shoppingAmount} onChange={(e) => setShoppingAmount(e.target.value)}/> ${shoppingAmount}
-        </label>
-        <br />
-        <label>
-          Transportation
-          <input type="text" data-type="currency" value={transportationAmount} onChange={(e) => setTransportationAmount(e.target.value)}/> ${transportationAmount}
-        </label>
-        <br />
-        <label>
-          Food/Dining: <input type="text" data-type="currency" value={foodAmount} onChange={(e) => setFoodAmount(e.target.value)}/> ${foodAmount}
-        </label>
-        <br />
-        <label>
-          Childcare: <input type="text" data-type="currency" value={childcareAmount} onChange={(e) => setChildcareAmount(e.target.value)}/> ${childcareAmount}
-        </label>
-        <br />
-        <label>
-          Uncategorized: <input type="text" data-type="currency" value={uncategorizedAmount} onChange={(e) => setUncategorizedAmount(e.target.value)}/> ${uncategorizedAmount}
-        </label>
-        <br />
-        <br />
-        <h6>
-          Expense Total: ${expenseTotal} <button>Submit</button>
-        </h6>
-      </form> */
-}
-
-// const calculateExpenses = () => {
-//   let total = expenses.reduce((acc, curr) => acc + curr, 0);
-//   setExpenseTotal(total);
-// };

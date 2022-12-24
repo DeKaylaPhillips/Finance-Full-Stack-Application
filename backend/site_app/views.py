@@ -98,13 +98,13 @@ def budget_sheet(request):
         budget_obj.save()
 
         data = {
-        "First Name": first_name,
-        "Last Name": last_name,
-        "Budget": budget[0],
-        "Budget Amount": budget_obj.budget_amount,
-        "Expenses": expenses,
-        "Spend Amount": budget_obj.spend_amount,
-        "Remaining Balance": budget_obj.remaining_balance
+            "First Name": first_name,
+            "Last Name": last_name,
+            "Budget": budget[0],
+            "Budget Amount": budget_obj.budget_amount,
+            "Expenses": expenses,
+            "Spend Amount": budget_obj.spend_amount,
+            "Remaining Balance": budget_obj.remaining_balance
         }
 
         return JsonResponse({"Success": f"{True} - User Budget Information Accessible", "data": data})
@@ -118,43 +118,47 @@ def budget_sheet(request):
             user_budget = UserBudget.objects.get(user=request.user)
             user_budget.budget_amount = request.data['budget_amount']
             user_budget.save()
-            return JsonResponse({"Success": True, "Budget": f"BUDGET AMOUNT UPDATED: ${user_budget.budget_amount}"})
+
+            data = {
+                "BUDGET AMOUNT UPDATED": user_budget.budget_amount
+            }
+
+            return JsonResponse({"Success": True, "Budget": data})
 
         elif expense_amount:
             expense_id = request.data['id']
-            expense = UserExpense.objects.filter(user=request.user, id=expense_id).update(amount=request.data['amount'])
+            UserExpense.objects.filter(user=request.user, id=expense_id).update(amount=request.data['amount'])
             expenses = UserExpense.objects.filter(user=request.user).order_by('id')
             
             data = {
-                "Updated Expense": expense_id
+                "EXPENSE AMOUNT UPDATED (ID#)": expense_id
             }
 
-            return JsonResponse({"Success": True, "data": f"EXPENSE UPDATED. {data}"})
-        
-        else:
-            return JsonResponse({"Error": "Something went wrong!"})
+            return JsonResponse({"Success": True, "data": data})
 
+    # Delete an expense item from the user's list of expenses.
     if request.method == "DELETE":
         expense_to_delete = request.data['id']
         UserExpense.objects.filter(user=request.user, id=expense_to_delete).delete()
 
         data = {
-            "Deleted Expense": expense_to_delete
+            "EXPENSE REMOVED": expense_to_delete
         }
 
-        return JsonResponse({"Success": True, "data": f"EXPENSE REMOVED. {data}"})
-        
+        return JsonResponse({"Success": True, "data": data})
+
+    # Add an expense item to the user's list of expenses.   
     if request.method == "POST":
         add_expense_title = request.data['title']
         add_expense_amount = request.data['amount']
         UserExpense.objects.create(user=request.user, title=add_expense_title, amount=add_expense_amount)
-        
+
         data = {
-            "Title": add_expense_amount,
-            "Amount": add_expense_amount
+            "Category": add_expense_title, 
+            "Cost": add_expense_amount
         }
 
-        return JsonResponse({"Success": True, "data": f"EXPENSE ADDED. {data}"})
+        return JsonResponse({"Success": True, "data": data})
         
             
 

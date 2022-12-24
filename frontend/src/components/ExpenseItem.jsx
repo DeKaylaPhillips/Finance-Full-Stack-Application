@@ -15,7 +15,7 @@ export default function ExpenseItem(props) {
       id: props.id,
       amount: newAmount,
     });
-    console.log("Axios Call (updateUserExpense):", response);
+    console.log("AXIOS Call (updateExpense):", response);
 
     // For automatic state updates to reflect changes in remaining and spend total
     if (response.status == 200) {
@@ -36,13 +36,13 @@ export default function ExpenseItem(props) {
         id: props.id,
       } 
     });
-    console.log("Axios Call (deleteUserExpense):", response);
+    console.log("AXIOS (deleteExpense):", response);
     
     // For automatic state updates to reflect changes in remaining and spend total
     if (response.status == 200) {
-      const deleteResponse = await axios.get("/api/budgetSheet/");
-      const updatedSpendAmount = deleteResponse.data.data.Budget.spend_amount;
-      const updatedRemainingBalance = deleteResponse.data.data.Budget.remaining_balance;
+      const response = await axios.get("/api/budgetSheet/");
+      const updatedSpendAmount = response.data.data.Budget.spend_amount;
+      const updatedRemainingBalance = response.data.data.Budget.remaining_balance;
       props.setSpendAmount(updatedSpendAmount);
       props.setRemainingBalance(updatedRemainingBalance);
 

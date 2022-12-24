@@ -1,34 +1,41 @@
 import { MdOutlineAddBox } from "react-icons/md";
 import React, { useState } from "react";
+import axios from "axios";
 
-export default function AddExpense() {
-  const [expenseTitle, setExpenseTitle] = useState("");
+export default function AddExpense(props) {
+  const [title, setTitle] = useState("");
   const [amount, setAmount] = useState(0);
 
   async function addExpense(event) {
     event.preventDefault()
     const response = await axios.post("/api/budgetSheet/", {
-      title: expenseTitle,
-      amount: amount,
+      title: title,
+      amount: amount, 
     })
-    console.log("AXIOS: addExpense", response.data);
+    console.log("AXIOS Call: (addExpense)", response);
+
+    // For automatic state updates to reflect changes in remaining and spend total
+    if (response.status == 200) {
+      const response = await axios.get("/api/budgetSheet/")
+      const updatedSpendAmount = response.data.data.Budget.spend_amount
+      const updatedRemainingBalance = response.data.data.Budget.remaining_balance
+      props.setSpendAmount(updatedSpendAmount);
+      props.setRemainingBalance(updatedRemainingBalance);
+      props.getUser()
+    }
   }
-  // UPDATE EXPENSE LIST
-  // ADD EVENT HANDLER TO ADD NEW EXPENSE TO USER'S DATABASE
-  // ACCEPT USER'S INFORMATION AS PROPS, PROBABLY
+  
   return (
-    <form>
+    <form onSubmit={addExpense}>
       <div className="row justify-content-md-center">
         <div className="col">
           <label for="expense">Expense</label>
           <input
             required="True"
             type="text"
-            id="expense"
-            placeholder="New Expense Category"
+            placeholder="Expense Name"
             className="form-control"
-            value={expenseTitle}
-            onChange={(e) => setExpenseTitle(e.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <div className="col">
@@ -36,10 +43,8 @@ export default function AddExpense() {
           <input
             required="True"
             type="text"
-            id="cost"
             placeholder="Amount"
             className="form-control"
-            value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
         </div>
