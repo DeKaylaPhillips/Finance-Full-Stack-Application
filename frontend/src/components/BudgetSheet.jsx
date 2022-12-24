@@ -31,6 +31,8 @@ export default function BudgetSheet() {
     getCurrentUser();
   }, []);
 
+  // TODO: ADD AN ALERT WINDOW TO ALERT USERS WHEN A NEGATIVE REMAINING BALANCE IS CALCULATED.
+
   return (
     <>
       <NavBar firstName={firstName} lastName={lastName} />

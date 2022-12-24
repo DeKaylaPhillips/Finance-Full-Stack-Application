@@ -19,11 +19,8 @@ export default function ExpenseItem(props) {
     // For automatic state updates to reflect changes in remaining and spend total
     if (response.status == 200) {
       const response = await axios.get("/api/budgetSheet/")
-      console.log(response)
       const updatedSpendAmount = response.data.data.Budget.spend_amount
-      console.log(updatedSpendAmount)
       const updatedRemainingBalance = response.data.data.Budget.remaining_balance
-      console.log(updatedRemainingBalance)
       props.setSpendAmount(updatedSpendAmount);
       props.setRemainingBalance(updatedRemainingBalance);
       props.getUser();
