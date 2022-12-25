@@ -159,11 +159,14 @@ If a user edits an expense amount or deletes a category, the newly calculate spe
 5. *budget_sheet*
    SERVER URL - "api/budgetSheet/"
    
-6. 
+6. *salary_finder*
 
 # API-TESTING
-...
+API: Infosalary (Average Salary for Any Job in the US)
+API Documentation: https://rapidapi.com/infosalary-infosalary-default/api/infosalary/details
 
+API: Sandbox Income Tax API - 
+API Documentation: https://developer.sandbox.co.in/docs/calculate-income-tax-as-per-new-regime-1
 
 # TODO:
 - organize components/pages

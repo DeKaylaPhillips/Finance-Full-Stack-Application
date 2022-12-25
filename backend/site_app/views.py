@@ -5,6 +5,10 @@ from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from functools import reduce
+import os
+import requests
+from dotenv import load_dotenv
+load_dotenv()
 # Create your views here.
 
 def index(request):
@@ -60,6 +64,7 @@ def signIn(request):
 
 @api_view(["GET"])
 def dashboard(request):
+    # Grab the current user's information
     first_name = request.user.first_name
     last_name = request.user.last_name
 
@@ -67,6 +72,7 @@ def dashboard(request):
         "First Name": first_name,
         "Last Name": last_name
     }
+
     return JsonResponse({"data": data})
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
@@ -159,8 +165,39 @@ def budget_sheet(request):
         }
 
         return JsonResponse({"Success": True, "data": data})
-        
-            
+
+@api_view(["GET", "POST"])       
+def salary_finder(request):
+    if request.method == "POST":
+        pass
+    elif request.method == "GET":
+        pass
+    
+    
+    
+    first_name = request.user.first_name
+    last_name = request.user.last_name  
+    print(request.data)
+
+    data = {
+        "First Name": first_name,
+        "Last Name": last_name
+    }
+
+    # api_key = os.environ['API_KEY']
+    # api_endpoint = "https://job-salary-data.p.rapidapi.com/job-salary"
+    # # querystring = {"job_title":"nodejs developer","location":"new york, usa","radius":"200"}
+    
+    # headers = {
+    #     "X-RapidAPI-Key": api_key,
+    #     "X-RapidAPI-Host": "job-salary-data.p.rapidapi.com"
+    # }
+
+    # response = requests.request("GET", api_endpoint, headers=headers, params=querystring)
+
+    # print(response.text)
+
+    return JsonResponse({"Success": True, "data": data})
 
     
     

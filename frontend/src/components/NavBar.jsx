@@ -10,8 +10,8 @@ export default function NavBar({firstName, lastName}) {
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
             <Nav.Link as={Link} to="/budgetSheet">Budget Sheet</Nav.Link>
-            <Nav.Link as={Link} to="/salary-calculator">Salary Calculator</Nav.Link>
-            <Nav.Link as={Link} to="/salary-finder">Salary Finder</Nav.Link>
+            <Nav.Link as={Link} to="/salaryCalculator">Salary Calculator</Nav.Link>
+            <Nav.Link as={Link} to="/salaryFinder">Salary Finder</Nav.Link>
           </Nav>
           <Nav className="ms-auto">
             <Navbar.Text>

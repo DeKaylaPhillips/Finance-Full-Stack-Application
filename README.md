@@ -20,7 +20,7 @@ HomePage Features
     - Current Salary
 
 Personal Budgeting Sheet Page (No API)
-Gross Pay Calculator Page (No API)
+<!-- Gross Pay Calculator Page (No API) -->
 Income Tax Calculator Page (API)
 Access to information on salary estimates by job title (API)
     

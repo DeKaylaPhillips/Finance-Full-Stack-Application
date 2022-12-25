@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Authentication from "./components/AuthenticationPage";
 import Dashboard from "./components/Dashboard";
 import BudgetSheet from "./components/BudgetSheet";
+import SalaryFinder from "./components/SalaryFinder";
 
 const getCSRFToken = ()=>{
   let csrfToken
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="" element={<Authentication />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/budgetSheet" element={<BudgetSheet />} />
+          <Route path="/salaryFinder" element={<SalaryFinder />} />
         </Routes>
       </Router>
     </div>
