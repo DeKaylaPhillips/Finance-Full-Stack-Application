@@ -15,11 +15,13 @@ export default function NavBar({firstName, lastName}) {
           </Nav>
           <Nav className="ms-auto">
             <Navbar.Text>
-              Signed in as:{" "}
+              Logged in as:{" "}
               <a href="/dashboard">
                 {" "}
                 {firstName} {lastName}
               </a>
+              {" "}
+              <a href="/">Logout</a>
             </Navbar.Text>
           </Nav>
         </Container>

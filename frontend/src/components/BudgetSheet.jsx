@@ -37,7 +37,7 @@ export default function BudgetSheet() {
     <>
       <NavBar firstName={firstName} lastName={lastName} />
       <div className="container">
-        <h1 className="mt-3">{firstName}'s Personal Budget Planner</h1>
+        <h1 className="mt-5">{firstName}'s Personal Budget Planner</h1>
         <div className="row mt-3">
           <div className="col-sm">
             <Budget 

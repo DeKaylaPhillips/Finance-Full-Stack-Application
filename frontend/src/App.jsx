@@ -7,6 +7,7 @@ import Authentication from "./components/AuthenticationPage";
 import Dashboard from "./components/Dashboard";
 import BudgetSheet from "./components/BudgetSheet";
 import SalaryFinder from "./components/SalaryFinder";
+import SalaryCalculator from "./components/SalaryCalculator";
 
 const getCSRFToken = ()=>{
   let csrfToken
@@ -35,6 +36,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/budgetSheet" element={<BudgetSheet />} />
           <Route path="/salaryFinder" element={<SalaryFinder />} />
+          <Route path="/salaryCalculator" element={<SalaryCalculator />} />
         </Routes>
       </Router>
     </div>

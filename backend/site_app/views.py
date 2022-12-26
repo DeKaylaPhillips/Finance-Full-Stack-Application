@@ -171,22 +171,21 @@ def budget_sheet(request):
     
 
 @api_view(["GET", "POST"])       
-def salary_finder(request, job_query=None, location_query=None):
+def salary_finder(request):
     # Retrieves the user's information, the API response, and caches the response to not have to continuously make API calls due to call limitation 
     if request.method == "GET":
         first_name = request.user.first_name
         last_name = request.user.last_name  
-        # job_query = request.data.get('job_query', None)
-        # location_query = request.data.get('location_query', None)
-        
+
         data = {
             "First Name": first_name,
-            "Last Name": last_name
+            "Last Name": last_name,
         }
-
+        
         return JsonResponse({"Success": True, "data": data})
     
     # Accepts Job and Location input on salary finder page 
+    
     if request.method == "POST":
         job_query = request.data['Job Query']
         location_query = request.data['Location Query']
@@ -208,19 +207,48 @@ def salary_finder(request, job_query=None, location_query=None):
         }
 
         response = requests.request("GET", api_endpoint, headers=headers, params=querystring)
-        salary_data = response.json()
-        pp.pprint(salary_data)
+        salary_data = response.json()['data']
+        
+        job_data = []
+        for i, data in enumerate(salary_data):
+            # Format specifier to ensure salaries are casted with only 2 decimal points.
+            min_salary = "{:.2f}".format(data['min_salary'])
+            max_salary = "{:.2f}".format(data['max_salary'])
+            med_salary = "{:.2f}".format(data['median_salary'])
 
+            job_data.append(
+                {
+                    'id': i + 1,
+                    'job_title': data['job_title'],
+                    'location': data['location'],
+                    'min_salary': f"${min_salary}",
+                    'median_salary': f"${med_salary}",
+                    'max_salary': f"${max_salary}",
+                    'publisher': data['publisher_name'],
+                    'link_to_source': data['publisher_link']
+                })
+    
         data = {
             "Job Query": job_query,
             "Location Query": location_query,
-            "Salary Info": salary_data
+            "Salary Info": job_data
         }
-
+        print(data)
         return JsonResponse({"Success": True, "data": data})
-    
-    
-    
+
+@api_view(['GET'])
+def salary_calculator(request):
+    if request.method == "GET":
+        first_name = request.user.first_name
+        print(first_name)
+        last_name = request.user.last_name  
+
+        data = {
+            "First Name": first_name,
+            "Last Name": last_name,
+        }
+        
+        return JsonResponse({"Success": True, "data": data})
    
 
     
