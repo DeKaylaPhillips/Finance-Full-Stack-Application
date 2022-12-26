@@ -25,13 +25,14 @@ export default function SalaryFinder() {
 
 //   how to send search results to a 3rd party API ??*
 
-//   async function sendSearchResults() {
-//     const response = await axios.post("/api/salaryFinder", {
-//         "Job Query": jobQuery,
-//         "Location Query": locationQuery,
-//     });
-//     console.log(response);
-//   }
+  async function sendSearchResults(event) {
+    event.preventDefault()
+    const response = await axios.post("/api/salaryFinder/", {
+        "Job Query": jobQuery,
+        "Location Query": locationQuery,
+    });
+    console.log(response.data);
+  }
 
   return (
     <div>

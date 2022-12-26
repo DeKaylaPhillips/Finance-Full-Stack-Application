@@ -1,12 +1,15 @@
+import os
+import requests
+import pprint as pp
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
+from django.core.cache import cache
+from datetime import timedelta
 from .models import *
 from functools import reduce
-import os
-import requests
 from dotenv import load_dotenv
 load_dotenv()
 # Create your views here.
@@ -165,39 +168,62 @@ def budget_sheet(request):
         }
 
         return JsonResponse({"Success": True, "data": data})
+    
 
 @api_view(["GET", "POST"])       
-def salary_finder(request):
+def salary_finder(request, job_query=None, location_query=None):
+    # Retrieves the user's information, the API response, and caches the response to not have to continuously make API calls due to call limitation 
+    if request.method == "GET":
+        first_name = request.user.first_name
+        last_name = request.user.last_name  
+        # job_query = request.data.get('job_query', None)
+        # location_query = request.data.get('location_query', None)
+        
+        data = {
+            "First Name": first_name,
+            "Last Name": last_name
+        }
+
+        return JsonResponse({"Success": True, "data": data})
+    
+    # Accepts Job and Location input on salary finder page 
     if request.method == "POST":
-        pass
-    elif request.method == "GET":
-        pass
+        job_query = request.data['Job Query']
+        location_query = request.data['Location Query']
+        
+        if not job_query or not location_query:
+            # Add "required" attribute to input on frontend
+            return JsonResponse({"Success": False, "Error": "Missing required fields."})
+        
+        api_key = os.environ['API_KEY']
+        api_endpoint = "https://job-salary-data.p.rapidapi.com/job-salary"
+        querystring = {
+            "job_title": job_query,
+            "location": location_query,
+        } 
+
+        headers = {
+            "X-RapidAPI-Key": api_key,
+            "X-RapidAPI-Host": "job-salary-data.p.rapidapi.com"
+        }
+
+        response = requests.request("GET", api_endpoint, headers=headers, params=querystring)
+        salary_data = response.json()
+        pp.pprint(salary_data)
+
+        data = {
+            "Job Query": job_query,
+            "Location Query": location_query,
+            "Salary Info": salary_data
+        }
+
+        return JsonResponse({"Success": True, "data": data})
     
     
     
-    first_name = request.user.first_name
-    last_name = request.user.last_name  
-    print(request.data)
+   
 
-    data = {
-        "First Name": first_name,
-        "Last Name": last_name
-    }
-
-    # api_key = os.environ['API_KEY']
-    # api_endpoint = "https://job-salary-data.p.rapidapi.com/job-salary"
-    # # querystring = {"job_title":"nodejs developer","location":"new york, usa","radius":"200"}
     
-    # headers = {
-    #     "X-RapidAPI-Key": api_key,
-    #     "X-RapidAPI-Host": "job-salary-data.p.rapidapi.com"
-    # }
-
-    # response = requests.request("GET", api_endpoint, headers=headers, params=querystring)
-
-    # print(response.text)
-
-    return JsonResponse({"Success": True, "data": data})
 
     
     
