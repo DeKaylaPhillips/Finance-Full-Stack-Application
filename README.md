@@ -1,6 +1,6 @@
 **Assessment 5 Personal Project**
 
-Simple personal finance website that allows a user to remain up to date on financial market news, create their own personal monthly budget sheet, and and access job salary estimates based on the job title and location matching their query.
+Simple personal finance website that allows a user to remain up to date on financial market news, create their own personal monthly budget sheet, and access job salary estimates based on the job title and location matching their query.
 
 **APIS**
 - AlphaVantage - Trending Articles
