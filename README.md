@@ -1,35 +1,20 @@
-# Assessment-5-Personal-Project
-Personal finance website where user will be able to create a budget, calculate income tax based on current salary, and view job salary estimates based on job title.
+**Assessment 5 Personal Project**
 
-**PROJECT IDEAS**
+Simple personal finance website that allows a user to remain up to date on financial market news, create their own personal monthly budget sheet, and and access job salary estimates based on the job title and location matching their query.
 
-**Financial Site**
+**APIS**
+- AlphaVantage - Trending Articles
+- Documentation: https://www.alphavantage.co/documentation/
 
-Website will prompt user to sign in, where they will have access to a an annual wage calculator, an income tax calculator, possibly a sheet for budgeting, access to job salary estimates based on the job title matching their query, and information about the amount of income tax they pay which results in their net pay.
+- RapidAPI - Job Salary Data API 
+- Documentation - https://rapidapi.com/letscrape-6bRBa3QguO5/api/job-salary-data/details
 
-**FEATURES**
+**Stretch Goals**
+- Utilize Recharts Library to display real-time stock data.
+- Implement net and gross pay salary calculators.
 
-HomePage Features
-1. Sign In (Information logged to database)
-2. Sign Out (Information logged to database)
-3. Sign Up (Information logged to data)
-    - First Name
-    - Last Name
-    - Occupation
-    - Location 
-    - Current Salary
 
-Personal Budgeting Sheet Page (No API)
-<!-- Gross Pay Calculator Page (No API) -->
-Income Tax Calculator Page (API)
-Access to information on salary estimates by job title (API)
+
+
     
-<!-- API: Library Research Services API Wage Calculator
-API Documentation: https://api.lrs.org/docs/wage-calculator
-> GROSS PAY  -->
-<!-- 
-API: Infosalary (Average Salary for Any Job in the US)
-API Documentation: https://rapidapi.com/infosalary-infosalary-default/api/infosalary/details
 
-API: Sandbox Income Tax API - 
-API Documentation: https://developer.sandbox.co.in/docs/calculate-income-tax-as-per-new-regime-1 -->

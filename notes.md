@@ -52,6 +52,17 @@
 
 
 # PROJECT
+**FEATURES**
+HomePage Features
+1. Sign In (Information logged to database)
+2. Sign Out (Information logged to database)
+3. Sign Up (Information logged to data)
+    - First Name
+    - Last Name
+    - Occupation
+    - Location 
+    - Current Salary
+    - 
 **MODELS**
 USER MODEL - 
 *USED DJANGO ABSTRACT USER AUTHENTICATION MODEL, SO INCLUDING THIS DATA IN MODEL NOT NEEDED*

@@ -60,6 +60,8 @@ export default function Authentication() {
   return (
     <div className="container">
       <h1 className="mt-5">Capital Kay Finance</h1>
+      <h3>Personal budgetting, financial news, and salary data.</h3>
+      <br />
       <h5>Returning Users</h5>
       <Form onSubmit={login} className="justify-content-between">
         {loginError && (
@@ -72,7 +74,7 @@ export default function Authentication() {
         <Form.Group>
           <Form.Label>Email</Form.Label>
           <Form.Control 
-            type="text" 
+            type="email" 
             placeholder="email" 
             style={{ margin: "10px" }}
             onChange={(e) => {
@@ -82,7 +84,7 @@ export default function Authentication() {
         <Form.Group>
           <Form.Label>Password</Form.Label>
           <Form.Control 
-            type="text" 
+            type="password" 
             placeholder="password" 
             style={{ margin: "10px" }}
             onChange={(e) => {
@@ -133,7 +135,7 @@ export default function Authentication() {
         Create a New Account to Get Started!
       </h5>
   
-      <Form className="justify-content-between">
+      <Form className="justify-content-between" onSubmit={createAccount}>
         {error && (
           <h6 style={{ color: "red", fontWeight: "bold" }}>
             {error}
@@ -144,19 +146,19 @@ export default function Authentication() {
 
         <Form.Group>
           <Form.Label>First Name</Form.Label>
-          <Form.Control type="text" placeholder="First Name" />
+          <Form.Control type="text" placeholder="First Name" onChange={(e) => setFirstName(e.target.value)}/>
         </Form.Group>
         <Form.Group>
           <Form.Label>Last Name</Form.Label>
-          <Form.Control type="text" placeholder="Last Name" />
+          <Form.Control type="text" placeholder="Last Name" onChange={(e) => setLastName(e.target.value)}/>
         </Form.Group>
         <Form.Group>
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" placeholder="Email" />
+          <Form.Control type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
         </Form.Group>
         <Form.Group>
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" />
+          <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
         </Form.Group>
         <br />
         <br />
