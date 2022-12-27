@@ -10,7 +10,7 @@ Simple personal finance website that allows a user to remain up to date on finan
 - Documentation - https://rapidapi.com/letscrape-6bRBa3QguO5/api/job-salary-data/details
 
 **Stretch Goals**
-- Utilize Recharts Library to display real-time stock data.
+- Utilize Recharts Library to display real-time stock data on a user's dashboard.
 - Implement net and gross pay salary calculators.
 
 
