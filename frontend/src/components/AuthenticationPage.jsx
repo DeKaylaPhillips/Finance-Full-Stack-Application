@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 
 export default function Authentication() {
@@ -48,7 +49,7 @@ export default function Authentication() {
         window.location.reload();
       }, 5000);
     }
-    console.log(response)
+    console.log(response);
   }
 
   const navigate = useNavigate();
@@ -57,63 +58,110 @@ export default function Authentication() {
   };
 
   return (
-    <div>
-      <h1>Capital Kay Finance</h1>
+    <div className="container">
+      <h1 className="mt-5">Capital Kay Finance</h1>
       <h5>Returning Users</h5>
-      <form onSubmit={login}>
-        
-        {loginError && (<h4 style={{ color: "red", fontWeight: "bold" }}>{loginError}<br />The page will refresh in 5 seconds...</h4>)}
-        
-        <label>
+      <Form onSubmit={login} className="justify-content-between">
+        {loginError && (
+          <h4 style={{ color: "red", fontWeight: "bold" }}>
+            {loginError}
+            <br />
+            The page will refresh in 5 seconds...
+          </h4>
+        )}
+        <Form.Group>
+          <Form.Label>Email</Form.Label>
+          <Form.Control 
+            type="text" 
+            placeholder="email" 
+            style={{ margin: "10px" }}
+            onChange={(e) => {
+            setUsername(e.target.value);
+          }}/>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password</Form.Label>
+          <Form.Control 
+            type="text" 
+            placeholder="password" 
+            style={{ margin: "10px" }}
+            onChange={(e) => {
+            setUserPassword(e.target.value);
+          }}/>
+        </Form.Group>
+        <br />
+        <br />
+        <Button type="submit" variant="dark">Login</Button>
+        </Form>
+        {/* <label>
           Email:
-          <input type="email" placeholder="Email" style={{ margin: "10px" }} value={username} onChange={(e) => {setUsername(e.target.value);}} />
+          <input
+            type="email"
+            placeholder="Email"
+            style={{ margin: "10px" }}
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
         </label>
-        
+
         <label>
           Password:
-          <input type="password" placeholder="Password" style={{ margin: "10px" }} value={userPassword} onChange={(e) => {setUserPassword(e.target.value);}} />
-        </label>
-        
-        <button type="submit">Login</button>
-      </form>
+          <input
+            type="password"
+            placeholder="Password"
+            style={{ margin: "10px" }}
+            value={userPassword}
+            onChange={(e) => {
+              setUserPassword(e.target.value);
+            }}
+          />
+        </label> */}
+
+        {/* <button type="submit">Login</button>
+      </form> */}
 
       <br />
       <br />
       <br />
       <br />
 
-      <h5>
+      <h5 className="mb-3">
         Never Used Our Site Before?
         <br />
         Create a New Account to Get Started!
       </h5>
-      
-      <form onSubmit={createAccount}>
-        
-        {error && (<h6 style={{ color: "red", fontWeight: "bold" }}>{error}<br />The page will refresh in 5 seconds...</h6>)}
-        
-        <label>
-          First Name:
-          <input type="text" style={{ margin: "10px" }} value={firstName} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
-        </label>
+  
+      <Form className="justify-content-between">
+        {error && (
+          <h6 style={{ color: "red", fontWeight: "bold" }}>
+            {error}
+            <br />
+            The page will refresh in 5 seconds...
+          </h6>
+        )}
+
+        <Form.Group>
+          <Form.Label>First Name</Form.Label>
+          <Form.Control type="text" placeholder="First Name" />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Last Name</Form.Label>
+          <Form.Control type="text" placeholder="Last Name" />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Email</Form.Label>
+          <Form.Control type="email" placeholder="Email" />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" />
+        </Form.Group>
         <br />
-        <label>
-          Last Name:
-          <input type="text" style={{ margin: "10px" }} value={lastName} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
-        </label>
         <br />
-        <label>
-          Email:
-          <input type="email" style={{ margin: "10px" }} value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Password
-          <input type="password" style={{ margin: "10px" }} value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <br />
-        <button type="submit">Create Account</button>
-      </form>
+        <Button type="submit" variant="dark">Create Account</Button>
+      </Form>
     </div>
   );
 }

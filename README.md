@@ -27,9 +27,9 @@ Access to information on salary estimates by job title (API)
 <!-- API: Library Research Services API Wage Calculator
 API Documentation: https://api.lrs.org/docs/wage-calculator
 > GROSS PAY  -->
-
+<!-- 
 API: Infosalary (Average Salary for Any Job in the US)
 API Documentation: https://rapidapi.com/infosalary-infosalary-default/api/infosalary/details
 
 API: Sandbox Income Tax API - 
-API Documentation: https://developer.sandbox.co.in/docs/calculate-income-tax-as-per-new-regime-1
+API Documentation: https://developer.sandbox.co.in/docs/calculate-income-tax-as-per-new-regime-1 -->

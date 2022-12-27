@@ -162,15 +162,13 @@ If a user edits an expense amount or deletes a category, the newly calculate spe
 6. *salary_finder*
 
 # API-TESTING
-API: Infosalary (Average Salary for Any Job in the US)
-API Documentation: https://rapidapi.com/infosalary-infosalary-default/api/infosalary/details
+API: Rapid API - Job Salary Data (paid)
 
-API: Sandbox Income Tax API - 
-API Documentation: https://developer.sandbox.co.in/docs/calculate-income-tax-as-per-new-regime-1
+API: Alphavantage - News and Articles (Free)
 
 # TODO:
 - organize components/pages
 - add more comments for functions/methods
 - clean up unused imports/code
 - add extra styling/formatting after all pages created
-- add signout feature to navbar! *important!*
+- add signout feature to navbar! *Done*

@@ -65,16 +65,32 @@ def signIn(request):
     else:
         return JsonResponse({"Login": False, "Login Message": f"False - User not found. {request.data}"})
 
+@api_view(['GET'])
+def sign_out(request):
+    logout(request._requests)
+    return JsonResponse({"Success": True, "data": "Logout successful."})
+
+
 @api_view(["GET"])
 def dashboard(request):
     # Grab the current user's information
-    first_name = request.user.first_name
-    last_name = request.user.last_name
+    if request.method == "GET":
+        first_name = request.user.first_name
+        last_name = request.user.last_name
 
-    data = {
-        "First Name": first_name,
-        "Last Name": last_name
-    }
+        api_key = os.environ['API_KEY2']
+        api_endpoint = f'https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics=finance&sort=LATEST&limit=20&apikey={api_key}'
+
+        response = requests.get(api_endpoint)
+        articles = response.json()
+
+        pp.pprint(articles)
+
+        data = {
+            "First Name": first_name,
+            "Last Name": last_name,
+            "Articles": articles
+        }
 
     return JsonResponse({"data": data})
 
@@ -194,7 +210,7 @@ def salary_finder(request):
             # Add "required" attribute to input on frontend
             return JsonResponse({"Success": False, "Error": "Missing required fields."})
         
-        api_key = os.environ['API_KEY']
+        api_key = os.environ['API_KEY1']
         api_endpoint = "https://job-salary-data.p.rapidapi.com/job-salary"
         querystring = {
             "job_title": job_query,
