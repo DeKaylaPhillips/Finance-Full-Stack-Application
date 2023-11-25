@@ -1,23 +1,22 @@
 import os
 import requests
 import pprint as pp
-from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework.decorators import api_view
 from django.contrib.auth import authenticate, login, logout
-from django.core.cache import cache
-from datetime import timedelta
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from functools import reduce
 from dotenv import load_dotenv
 load_dotenv()
 # Create your views here.
-
+@csrf_exempt
 def index(request):
     homepage = open('./static/index.html').read()
     return HttpResponse(homepage)
 
+@csrf_exempt
 @api_view(["POST"])
 def createAccount(request):
     first_name = request.data["first_name"]
@@ -47,6 +46,7 @@ def createAccount(request):
         print(str(e))
         return JsonResponse({"Error": str(e)})
 
+@csrf_exempt
 @api_view(["POST"])
 def signIn(request):
     username = request.data["email"]
@@ -57,7 +57,7 @@ def signIn(request):
         try:
             login(request._request, user)
             if user.is_authenticated:
-                # print(user.id)
+                print(user.id)
                 return HttpResponseRedirect(reverse('dashboard'))
         except Exception as e:
             print(str(e))
@@ -65,12 +65,13 @@ def signIn(request):
     else:
         return JsonResponse({"Login": False, "Login Message": f"False - User not found. {request.data}"})
 
+@csrf_exempt
 @api_view(['GET'])
 def sign_out(request):
     logout(request._requests)
     return JsonResponse({"Success": True, "data": "Logout successful."})
 
-
+@csrf_exempt
 @api_view(["GET"])
 def dashboard(request):
     # Grab the current user's information
@@ -94,6 +95,7 @@ def dashboard(request):
 
     return JsonResponse({"data": data})
 
+@csrf_exempt
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def budget_sheet(request):
 
@@ -185,7 +187,7 @@ def budget_sheet(request):
 
         return JsonResponse({"Success": True, "data": data})
     
-
+@csrf_exempt
 @api_view(["GET", "POST"])       
 def salary_finder(request):
     # Retrieves the user's information, the API response, and caches the response to not have to continuously make API calls due to call limitation 
@@ -252,6 +254,7 @@ def salary_finder(request):
         print(data)
         return JsonResponse({"Success": True, "data": data})
 
+@csrf_exempt
 @api_view(['GET'])
 def salary_calculator(request):
     if request.method == "GET":
