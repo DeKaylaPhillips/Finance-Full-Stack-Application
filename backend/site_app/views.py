@@ -1,77 +1,49 @@
-import os
-import requests
-import pprint as pp
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.urls import reverse
-from rest_framework.decorators import api_view
-from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
-from .models import *
-from functools import reduce
 from dotenv import load_dotenv
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from .models import *
+from .serializers import UserSerializer
+from functools import reduce
+import requests
+import pprint as pp
+
+import os
 load_dotenv()
-# Create your views here.
-@csrf_exempt
-def index(request):
-    homepage = open('./static/index.html').read()
-    return HttpResponse(homepage)
 
-@csrf_exempt
+
 @api_view(["POST"])
-def createAccount(request):
-    first_name = request.data["first_name"]
-    last_name = request.data["last_name"]
-    email = request.data["email"]
-    password = request.data["password"]
-    print(first_name, last_name, email, password)
- 
-    try:
-        new_user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email, password=password, username=email)
-        new_user.save()
-
-        expense_data = [
-            {'title': "Rent", 'amount': 0.0}, 
-            {'title': "Utilities", 'amount': 0.0},
-            {'title': "Transportation", 'amount': 0.0},
-            {'title': "Food/Dining", 'amount': 0.0},
-            {'title': "Childcare", 'amount': 0.0},
-            {'title': "Uncategorized", 'amount': 0.0}
-        ]
-        
-        for e in expense_data:
-            UserExpense.objects.create(user=new_user, title=e['title'], amount=e['amount']).save()
-              
-        return JsonResponse({"AccountCreated": True, "data": request.data})
-    except Exception as e:
-        print(str(e))
-        return JsonResponse({"Error": str(e)})
-
-@csrf_exempt
-@api_view(["POST"])
-def signIn(request):
-    username = request.data["email"]
-    password = request.data["password"]
-    user = authenticate(username=username, password=password)
-    
-    if user is not None and user.is_active:
-        try:
-            login(request._request, user)
-            if user.is_authenticated:
-                print(user.id)
-                return HttpResponseRedirect(reverse('dashboard'))
-        except Exception as e:
-            print(str(e))
-            return JsonResponse({"Login": False, "Login Failed": f"Server-side error."})
+def create_account(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        create_default_user_expenses(user)
+        return Response({ "account_created": True, "user_id": user.id })
     else:
-        return JsonResponse({"Login": False, "Login Message": f"False - User not found. {request.data}"})
+        return Response({ "account_created": False, "error": serializer.errors})
+    
+    
+@api_view(["POST"])
+def sign_in(request):
+    username = request.data.get("email")
+    password = request.data.get("password")
+    user = authenticate(request, username=username, password=password)
+    
+    if not user:
+        return Response({"login": False, "error": "Invalid login credentials. Please try again."}, status=401)
+    elif user and user.is_active:
+        login(request, user)
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({"login": True, "user_id": user.id, "token": token.key})
 
-@csrf_exempt
 @api_view(['GET'])
 def sign_out(request):
     logout(request._requests)
     return JsonResponse({"Success": True, "data": "Logout successful."})
 
-@csrf_exempt
 @api_view(["GET"])
 def dashboard(request):
     # Grab the current user's information
@@ -88,27 +60,20 @@ def dashboard(request):
         pp.pprint(articles)
 
         data = {
-            "First Name": first_name,
-            "Last Name": last_name,
-            "Articles": articles
+            "first_name": first_name,
+            "last_name": last_name,
+            "articles": articles
         }
-
     return JsonResponse({"data": data})
 
-@csrf_exempt
+
 @api_view(["GET", "POST", "PUT", "DELETE"])
 def budget_sheet(request):
-
-    # Get the user to display in the "Sign In As" section of the NavBar
     if request.method == "GET":
-        # Grab the user's information
         first_name = request.user.first_name
         last_name = request.user.last_name
 
-        # If the user is new, create a new personal budget sheet for them - otherwise, get the current logged in user's budget sheet.
         UserBudget.objects.get_or_create(user=request.user)
-
-        # Access the values in the budget sheet w/o serialization by creating lists.
         budget = list(UserBudget.objects.filter(user=request.user).values())
 
         # Expense Calculation
@@ -187,7 +152,7 @@ def budget_sheet(request):
 
         return JsonResponse({"Success": True, "data": data})
     
-@csrf_exempt
+
 @api_view(["GET", "POST"])       
 def salary_finder(request):
     # Retrieves the user's information, the API response, and caches the response to not have to continuously make API calls due to call limitation 
@@ -254,7 +219,7 @@ def salary_finder(request):
         print(data)
         return JsonResponse({"Success": True, "data": data})
 
-@csrf_exempt
+
 @api_view(['GET'])
 def salary_calculator(request):
     if request.method == "GET":
@@ -269,8 +234,14 @@ def salary_calculator(request):
         
         return JsonResponse({"Success": True, "data": data})
    
-
+def create_default_user_expenses(user):
+    expenses = ["Rent", "Utilities", "Transportation", "Food/Dining", "Childcare", "Uncategorized"]
+    for title in expenses:
+        UserExpense.objects.create(user=user, title=title, amount=0.0)
     
+def index(request):
+    homepage = open('./static/index.html').read()
+    return HttpResponse(homepage)
 
     
     
