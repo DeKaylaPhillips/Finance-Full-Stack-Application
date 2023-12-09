@@ -9,12 +9,20 @@ Simple personal finance website that allows a user to remain up to date on finan
 - RapidAPI - Job Salary Data API 
 - Documentation - https://rapidapi.com/letscrape-6bRBa3QguO5/api/job-salary-data/details
 
-**Stretch Goals**
-- Utilize Recharts Library to display real-time stock data on a user's dashboard.
-- Implement net and gross pay salary calculators.
+**Usage**
 
+Start the backend development server:
+```zsh
+% cd backend/
+% python manage.py runserver
+```
 
+Start the frontend development server:
+```zsh
+% cd frontend/
+% npm run dev
+```
 
-
+When both servers are successfully running, visit http://localhost:8000/ in your web browser.
     
 
