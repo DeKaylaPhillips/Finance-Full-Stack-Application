@@ -15,46 +15,69 @@ export default function Authentication() {
 
   async function createAccount(event) {
     event.preventDefault();
-    const response = await axios.post("/api/createAccount/", {
+
+    if (!isValidPassword()) {
+      console.error("Password length not valid.");
+      setError("Password must contain 8 or more characters.");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+      return;
+    }
+
+    const response = await axios.post("/api/create_account/", {
       first_name: firstName,
       last_name: lastName,
       email: email,
       password: password,
     });
-    if (response.data["AccountCreated"] == true) {
-      alert("Your account was successfully created. Please log in.");
-      window.location.reload();
-    } else if (response.data["AccountCreated"] == false) {
-      setError("Invalid credentials. Please try again.");
+
+    const isAccountCreated = response.data["account_created"];
+
+    if (isAccountCreated) {
+      alert(
+        "Your account was successfully created. Please login after refresh..."
+      );
       setTimeout(() => {
         window.location.reload();
-      }, 5000);
+      }, 2000);
+    } else {
+      setError(response.data["error"]);
+      setTimeout(() => {
+        window.location.reload();
+      }, 4000);
     }
   }
 
   async function login(event) {
     event.preventDefault();
-    const response = await axios.post("/api/signIn/", {
+    const response = await axios.post("/api/sign_in/", {
       email: username,
       password: userPassword,
     });
-    if (response.data["Login"] !== false) {
-      alert("User successfully logged in. Redirecting to user dashboard.");
+
+    const isAuthenticated = response.data["login"];
+    
+    if (isAuthenticated) {
+      alert(`Hello! Redirecting you to your dashboard page...`);
       setTimeout(() => {
-        goToDashboard(), 2000;
-      });
-    } else if (response.data["Login"] == false) {
-      setLoginError("Incorrect username or password. Please try again.");
+        goToDashboard();
+      }, 2000);
+    } else {
+      setLoginError(response.data["error"]);
       setTimeout(() => {
         window.location.reload();
-      }, 5000);
+      }, 2000);
     }
-    console.log(response);
   }
 
   const navigate = useNavigate();
   const goToDashboard = () => {
     navigate("/dashboard");
+  };
+
+  const isValidPassword = () => {
+    return password.length >= 8 ? true : false;
   };
 
   return (
@@ -68,61 +91,33 @@ export default function Authentication() {
           <h4 style={{ color: "red", fontWeight: "bold" }}>
             {loginError}
             <br />
-            The page will refresh in 5 seconds...
+            The page will refresh in 2 seconds...
           </h4>
         )}
         <Form.Group>
           <Form.Label>Email</Form.Label>
-          <Form.Control 
-            type="email" 
-            placeholder="email" 
+          <Form.Control
+            type="email"
+            placeholder="email"
             style={{ margin: "10px" }}
-            onChange={(e) => {
-            setUsername(e.target.value);
-          }}/>
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </Form.Group>
         <Form.Group>
           <Form.Label>Password</Form.Label>
-          <Form.Control 
-            type="password" 
-            placeholder="password" 
+          <Form.Control
+            type="password"
+            placeholder="password"
             style={{ margin: "10px" }}
-            onChange={(e) => {
-            setUserPassword(e.target.value);
-          }}/>
+            onChange={(e) => setUserPassword(e.target.value)}
+          />
         </Form.Group>
         <br />
         <br />
-        <Button type="submit" variant="dark">Login</Button>
-        </Form>
-        {/* <label>
-          Email:
-          <input
-            type="email"
-            placeholder="Email"
-            style={{ margin: "10px" }}
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-          />
-        </label>
-
-        <label>
-          Password:
-          <input
-            type="password"
-            placeholder="Password"
-            style={{ margin: "10px" }}
-            value={userPassword}
-            onChange={(e) => {
-              setUserPassword(e.target.value);
-            }}
-          />
-        </label> */}
-
-        {/* <button type="submit">Login</button>
-      </form> */}
+        <Button type="submit" variant="dark">
+          Login
+        </Button>
+      </Form>
 
       <br />
       <br />
@@ -134,35 +129,53 @@ export default function Authentication() {
         <br />
         Create a New Account to Get Started!
       </h5>
-  
-      <Form className="justify-content-between" onSubmit={createAccount}>
+
+      <Form onSubmit={createAccount} className="justify-content-between">
         {error && (
           <h6 style={{ color: "red", fontWeight: "bold" }}>
             {error}
             <br />
-            The page will refresh in 5 seconds...
+            The page will refresh in 2 seconds...
           </h6>
         )}
 
         <Form.Group>
           <Form.Label>First Name</Form.Label>
-          <Form.Control type="text" placeholder="First Name" onChange={(e) => setFirstName(e.target.value)}/>
+          <Form.Control
+            type="text"
+            placeholder="First Name"
+            onChange={(e) => setFirstName(e.target.value)}
+          />
         </Form.Group>
         <Form.Group>
           <Form.Label>Last Name</Form.Label>
-          <Form.Control type="text" placeholder="Last Name" onChange={(e) => setLastName(e.target.value)}/>
+          <Form.Control
+            type="text"
+            placeholder="Last Name"
+            onChange={(e) => setLastName(e.target.value)}
+          />
         </Form.Group>
         <Form.Group>
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
+          <Form.Control
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </Form.Group>
         <Form.Group>
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </Form.Group>
         <br />
         <br />
-        <Button type="submit" variant="dark">Create Account</Button>
+        <Button type="submit" variant="dark">
+          Create Account
+        </Button>
       </Form>
     </div>
   );
