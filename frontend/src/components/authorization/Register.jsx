@@ -4,17 +4,35 @@ import { Form, Button, Alert } from "react-bootstrap";
 import useForm from "../../hooks/useForm";
 import { InputField } from "../forms/Inputs";
 
-function Login() {
-  const { login, authError } = useAuth("");
+function Register() {
+  const { register, authError } = useAuth("");
   const { inputs, handleInputChange, handleSubmit } = useForm(() =>
-    login(inputs.email, inputs.password)
+    register(inputs.firstName, inputs.lastName, inputs.email, inputs.password)
   );
 
   return (
     <div>
-      <h5>Login</h5>
+      <h5>Register</h5>
       {authError && <Alert variant="danger">{authError}</Alert>}
       <Form onSubmit={handleSubmit} className="mt-3">
+        <InputField
+          id="formFirstName"
+          name="firstName"
+          type="text"
+          label="First Name"
+          value={inputs.firstName || ""}
+          onChange={handleInputChange}
+          required
+        />
+        <InputField
+          id="formLastName"
+          name="lastName"
+          type="text"
+          label="Last Name"
+          value={inputs.lastName || ""}
+          onChange={handleInputChange}
+          required
+        />
         <InputField
           id="formEmail"
           name="email"
@@ -29,17 +47,16 @@ function Login() {
           name="password"
           type="password"
           label="Password"
-          placeholder="Enter your password"
           value={inputs.password || ""}
           onChange={handleInputChange}
           required
         />
         <Button type="submit" variant="dark" className="mt-3">
-          Login
+          Register
         </Button>
       </Form>
     </div>
   );
 }
 
-export default Login;
+export default Register;
