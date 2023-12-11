@@ -22,9 +22,9 @@ def create_account(request):
     if serializer.is_valid():
         user = serializer.save()
         create_default_user_expenses(user)
-        return Response({"account_created": True, "user_id": user.id})
+        return Response({"register": True, "user_id": user.id})
     else:
-        return Response({"account_created": False, "error": serializer.errors})
+        return Response({"register": False, "error": serializer.errors})
 
 
 @api_view(["POST"])
@@ -40,15 +40,20 @@ def sign_in(request):
     elif user and user.is_active:
         login(request, user)
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({"login": True, "user_id": user.id, "token": token.key})
+        user_data = {
+            "user_id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name
+        }
+        return Response({"login": True, "user": user_data, "token": token.key})
 
 
 @api_view(["GET"])
 def sign_out(request):
     logout(request._requests)
-    return JsonResponse({"Success": True, "data": "Logout successful."})
+    return JsonResponse({"logout": True, "data": "Logout successful."})
 
-
+# START HERE ---------------------------
 @api_view(["GET"])
 def dashboard(request):
     # Grab the current user's information
