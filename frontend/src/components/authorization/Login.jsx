@@ -1,11 +1,12 @@
 import React from "react";
-import { useAuth } from "../../hooks/useAuth";
-import { Form, Button, Alert } from "react-bootstrap";
-import useForm from "../../hooks/useForm";
+import { Form, Alert } from "react-bootstrap";
+import { DarkButton } from "../forms/Buttons";
 import { InputField } from "../forms/Inputs";
+import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "../../hooks/useForm";
 
 function Login() {
-  const { login, authError } = useAuth("");
+  const { login, authLoginError } = useAuth("");
   const { inputs, handleInputChange, handleSubmit } = useForm(() =>
     login(inputs.email, inputs.password)
   );
@@ -13,13 +14,16 @@ function Login() {
   return (
     <div>
       <h5>Login</h5>
-      {authError && <Alert variant="danger">{authError}</Alert>}
+      <div className="mt-2">
+        {authLoginError && <Alert variant="danger">{authLoginError}</Alert>}
+      </div>
       <Form onSubmit={handleSubmit} className="mt-3">
         <InputField
           id="formEmail"
           name="email"
           type="email"
           label="Email"
+          placeholder="Enter your email"
           value={inputs.email || ""}
           onChange={handleInputChange}
           required
@@ -34,9 +38,7 @@ function Login() {
           onChange={handleInputChange}
           required
         />
-        <Button type="submit" variant="dark" className="mt-3">
-          Login
-        </Button>
+        <DarkButton label="Login" />
       </Form>
     </div>
   );

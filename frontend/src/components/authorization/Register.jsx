@@ -1,25 +1,31 @@
 import React from "react";
-import { useAuth } from "../../hooks/useAuth";
-import { Form, Button, Alert } from "react-bootstrap";
-import useForm from "../../hooks/useForm";
+import { Form, Alert } from "react-bootstrap";
+import { DarkButton } from "../forms/Buttons";
 import { InputField } from "../forms/Inputs";
+import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "../../hooks/useForm";
 
 function Register() {
-  const { register, authError } = useAuth("");
+  const { register, authRegistrationError } = useAuth("");
   const { inputs, handleInputChange, handleSubmit } = useForm(() =>
     register(inputs.firstName, inputs.lastName, inputs.email, inputs.password)
   );
 
   return (
     <div>
-      <h5>Register</h5>
-      {authError && <Alert variant="danger">{authError}</Alert>}
+      <h5>Create An Account</h5>
+      <div className="mt-2">
+        {authRegistrationError && (
+          <Alert variant="danger">{authRegistrationError} </Alert>
+        )}
+      </div>
       <Form onSubmit={handleSubmit} className="mt-3">
         <InputField
           id="formFirstName"
           name="firstName"
           type="text"
           label="First Name"
+          placeholder="First Name"
           value={inputs.firstName || ""}
           onChange={handleInputChange}
           required
@@ -29,6 +35,7 @@ function Register() {
           name="lastName"
           type="text"
           label="Last Name"
+          placeholder="Last Name"
           value={inputs.lastName || ""}
           onChange={handleInputChange}
           required
@@ -38,6 +45,7 @@ function Register() {
           name="email"
           type="email"
           label="Email"
+          placeholder="Email"
           value={inputs.email || ""}
           onChange={handleInputChange}
           required
@@ -47,13 +55,12 @@ function Register() {
           name="password"
           type="password"
           label="Password"
+          placeholder="Password"
           value={inputs.password || ""}
           onChange={handleInputChange}
           required
         />
-        <Button type="submit" variant="dark" className="mt-3">
-          Register
-        </Button>
+        <DarkButton label="Register" />
       </Form>
     </div>
   );

@@ -12,13 +12,16 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: false,
     user: null,
   });
-  const [authError, setAuthError] = useState(null);
+  const [authLoginError, setAuthLoginError] = useState(null);
+  const [authRegistrationError, setAuthRegistrationError] = useState(null);
+  const [authLogoutError, setAuthLogoutError] = useState(null);
+
   const navigate = useNavigate();
 
   const login = async (email, password) => {
     try {
       const response = await AuthService.login(email, password);
-      console.log("check response", response)
+      console.log("check response", response);
       if (response.login) {
         localStorage.setItem("authToken", response.token);
         setAuthState({
@@ -28,10 +31,10 @@ export const AuthProvider = ({ children }) => {
         });
         navigate("/dashboard");
       } else {
-        setAuthError(response.error.detail || "Login failed.");
+        setAuthLoginError(response.error);
       }
     } catch (error) {
-      setAuthError(error.message);
+      setAuthLoginError(error.message);
     }
   };
 
@@ -42,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       setAuthState({ isAuthenticated: false, token: null, user: null });
       navigate("/");
     } catch (error) {
-      setAuthError(error.message);
+      setAuthLogoutError(error.message);
     }
   };
 
@@ -56,16 +59,29 @@ export const AuthProvider = ({ children }) => {
       );
       if (response.register) {
         setAuthState({ isAuthenticated: true, user: response.user });
-        navigate("/");
+        navigate("/dashboard");
+      } else {
+        console.error(response.error);
+        setAuthRegistrationError(
+          "Account with these credentials already exists."
+        );
       }
     } catch (error) {
-      setAuthError(error.message);
+      setAuthRegistrationError(error.message);
     }
   };
 
   return (
     <AuthContext.Provider
-      value={{ ...authState, authError, login, logout, register }}
+      value={{
+        ...authState,
+        authLoginError,
+        authRegistrationError,
+        authLogoutError,
+        login,
+        logout,
+        register,
+      }}
     >
       {children}
     </AuthContext.Provider>
