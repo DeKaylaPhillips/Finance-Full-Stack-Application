@@ -4,7 +4,7 @@ import axiosInstance from "./axiosInstance";
 export const AuthService = {
   login: async (email, password) => {
     try {
-      const response = await axiosInstance.post(`/sign_in/`, {
+      const response = await axiosInstance.post("/sign_in/", {
         email: email,
         password: password,
       });
@@ -20,7 +20,7 @@ export const AuthService = {
   },
   logout: async () => {
     try {
-      const response = await axiosInstance.post(`/signOut/`);
+      const response = await axiosInstance.post("/signOut/");
       if (response.status === 200) {
         return response.data;
       } else {
@@ -32,7 +32,7 @@ export const AuthService = {
   },
   register: async (firstName, lastName, email, password) => {
     try {
-      const response = await axiosInstance.post(`/create_account/`, {
+      const response = await axiosInstance.post("/create_account/", {
         first_name: firstName,
         last_name: lastName,
         email: email,
