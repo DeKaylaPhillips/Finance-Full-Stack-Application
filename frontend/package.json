@@ -13,6 +13,7 @@
     "@rsuite/icons": "^1.0.2",
     "axios": "^1.2.1",
     "bootstrap": "^5.2.3",
+    "fast-levenshtein": "^3.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^18.2.0",
