@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-export default function NavBar({ firstName, lastName }) {
 
+export default function NavBar({ firstName, lastName }) {
   async function signOut() {
     const response = await axios.post("/api/signOut/")
     console.log(response)
@@ -13,7 +13,7 @@ export default function NavBar({ firstName, lastName }) {
         <Container fluid>
           <Navbar.Brand href="/dashboard">Capital Kay Finance</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/dashboard">
+            <Nav.Link as={Link} to="/articles">
               Dashboard
             </Nav.Link>
             <Nav.Link as={Link} to="/budgetSheet">
@@ -26,7 +26,7 @@ export default function NavBar({ firstName, lastName }) {
           <Nav className="ms-auto">
             <Navbar.Text>
               Logged in as:{" "}
-              <a href="/dashboard">
+              <a href="/articles">
                 {" "}
                 {firstName} {lastName}
               </a>{" "}

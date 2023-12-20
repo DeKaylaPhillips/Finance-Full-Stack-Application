@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "rsuite/dist/rsuite.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
-import Dashboard from "./components/Dashboard";
+import Articles from "./components/Articles";
 import BudgetSheet from "./components/BudgetSheet";
 import SalaryFinder from "./components/SalaryFinder";
 import SalaryCalculator from "./components/SalaryCalculator";
@@ -16,7 +16,7 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" element={<AuthenticationPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/articles" element={<Articles />} />
             <Route path="/budgetSheet" element={<BudgetSheet />} />
             <Route path="/salaryFinder" element={<SalaryFinder />} />
             <Route path="/salaryCalculator" element={<SalaryCalculator />} />
