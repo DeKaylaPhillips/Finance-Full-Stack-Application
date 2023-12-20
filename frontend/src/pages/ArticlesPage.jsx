@@ -1,9 +1,9 @@
 import { Accordion, Alert } from "react-bootstrap";
-import { useArticles } from "../hooks/useArticles";
+import { useArticles } from '../hooks/useArticles'
 import { useAuth } from "../hooks/useAuth";
-import NavBar from "./NavBar";
+import NavBar from "../components/NavBar";
 
-export default function Articles() {
+export default function ArticlesPage() {
   const { articlesState, articlesError } = useArticles();
   const { user } = useAuth();
 
