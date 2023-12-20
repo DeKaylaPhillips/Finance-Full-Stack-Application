@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponse, JsonResponse
 from dotenv import load_dotenv
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -43,7 +42,7 @@ def sign_in(request):
         user_data = {
             "user_id": user.id,
             "first_name": user.first_name,
-            "last_name": user.last_name
+            "last_name": user.last_name,
         }
         return Response({"login": True, "user": user_data, "token": token.key})
 
@@ -53,24 +52,16 @@ def sign_out(request):
     logout(request._requests)
     return JsonResponse({"logout": True, "data": "Logout successful."})
 
-# START HERE ---------------------------
-@api_view(["GET"])
-def dashboard(request):
-    # Grab the current user's information
-    if request.method == "GET":
-        first_name = request.user.first_name
-        last_name = request.user.last_name
 
+@api_view(["GET"])
+def articles(request):
+    if request.method == "GET":
         api_key = os.environ["API_KEY2"]
         api_endpoint = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&topics=finance&sort=LATEST&limit=20&apikey={api_key}"
-
         response = requests.get(api_endpoint)
         articles = response.json()
-
-        pp.pprint(articles)
-
-        data = {"first_name": first_name, "last_name": last_name, "articles": articles}
-    return JsonResponse({"data": data})
+        article_data = {"articles": articles}
+    return JsonResponse({"data": article_data})
 
 
 @api_view(["GET", "POST", "PUT", "DELETE"])
