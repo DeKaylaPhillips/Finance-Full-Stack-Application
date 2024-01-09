@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { ArticleService } from "../services/articleService";
 import levenshtein from "fast-levenshtein";
 
-export const useArticles = (callback) => {
-  const [articlesState, setArticlesState] = useState(null);
-  const [articlesError, setArticlesError] = useState(null);
+// Used for fetching and managing articles
+export const useArticles = () => {
+  const [articlesState, setArticlesState] = useState({
+    loading: true,
+    articles: [],
+    error: null,
+  });
 
   const getUniqueArticles = (articles) => {
     const uniqueArticles = [];
@@ -35,19 +39,28 @@ export const useArticles = (callback) => {
         if (results.success) {
           const uniqueArticles = getUniqueArticles(results.articles);
           setArticlesState({
-            success: true,
+            loading: false,
             articles: uniqueArticles,
+            error: null,
           });
         } else {
-          setArticlesError(results.error);
+          setArticlesState({
+            loading: false,
+            articles: [],
+            error: results.error,
+          });
         }
       } catch (error) {
-        setArticlesError(error.message);
+        setArticlesState({
+          loading: false,
+          articles: [],
+          error: error.message,
+        });
       }
     };
 
     fetchArticles();
   }, []);
 
-  return { ...articlesState, articlesError };
+  return { ...articlesState };
 };
