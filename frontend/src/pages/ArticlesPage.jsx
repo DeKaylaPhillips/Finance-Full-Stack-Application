@@ -1,10 +1,10 @@
 import { Accordion, Alert } from "react-bootstrap";
-import { useArticles } from '../hooks/useArticles'
+import { useArticles } from "../hooks/useArticles";
 import { useAuth } from "../hooks/useAuth";
 import NavBar from "../components/NavBar";
 
 export default function ArticlesPage() {
-  const { articlesState, articlesError } = useArticles();
+  const { loading, articles, error } = useArticles();
   const { user } = useAuth();
 
   return (
@@ -19,15 +19,16 @@ export default function ArticlesPage() {
           Remain up-to-date with the financial market by exploring these
           trending news articles.
         </h6>
+        {loading && <div>Loading articles...</div>}
 
-        {articlesError && (
+        {error && (
           <div className="mt-3">
-            <Alert variant="danger">{articlesError}</Alert>
+            <Alert variant="danger">{error}</Alert>
           </div>
         )}
 
-        {articlesState &&
-          articlesState.map((article, idx) => (
+        {articles.length > 0 &&
+          articles.map((article, idx) => (
             <Accordion defaultActiveKey={idx == 0} flush>
               <Accordion.Item eventKey={idx}>
                 <div>
